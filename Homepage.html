@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="main.css"/>
     <meta charset="UTF-8">
-    <title>SpeakEasy Homepage</title>
+    <title>SpeakEasy</title>
 </head>
 <body>
 <div class = "page-header"><img src="Pictures/LASTLOGO.JPG"/></div>
@@ -23,7 +23,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#home">Home <span class="sr-only">(current)</span></a></li>
+                <li><a href="#home">Home <span class="sr-only">(current)</span></a></li>
                 <li><a href="#about">About</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -34,21 +34,67 @@
     </div><!-- /.container-fluid -->
 </nav>
 <div class = "jumbotron">
-    <h1>Welcome to SpeakEasy!</h1>
-    <p>We're currently looking for alpha testers for our next few months of development. If you're interested in being a part of the newest way to connect college campuses, then join us!</p>
-    <p><a class="btn btn-primary btn-lg" href="#" role="button"> Sign Up!</a></p>
+    <div class="container">
+        <h1>Welcome to SpeakEasy!</h1>
+        <p>We're currently looking for alpha testers for our next few months of development. If you're interested in being a part of the newest way to connect on college campuses, then join us!</p>
+        <!-- <p><a class="btn btn-primary btn-lg" href="#" role="button"> Sign Up!</a></p> -->
+    </div>
 </div>
 
-<div class="row">
-    <div class="col-lg-4">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="First Name">
+<div class="about">
+    <div class="container">
+        <div class="row text-center">
+            <h2>About Us</h2>
+            <h3>SpeakEasy is the newest way to meet new people on your college campus.</h3>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <img src="Pictures/emptybubble.jpg" class="img-circle aboutsymbol"> <!-- placeholder image -->
+                <p>Do you sometimes get the feeling that there are plenty of potential friends on your campus just waiting to be found? Here at SpeakEasy, we feel that your closest friends may be the ones you haven't met yet.</p>
+            </div>
+            <div class="col-md-4">
+                <img src="Pictures/emptybubble.jpg" class="img-circle aboutsymbol"> <!-- placeholder image -->
+                <p>We know it can be difficult to introduce yourself to new potential friends because let's face it: college students are busy, their social scenes can be cliquey, and sometimes the 'right' moment just never presents itself.</p>
+            </div>
+            <div class="col-md-4">
+                <img src="Pictures/emptybubble.jpg" class="img-circle aboutsymbol"> <!-- placeholder image -->
+                <p>With our model, SpeakEasy links you to possible new friends on your campus and takes the first few awkward steps out of the equation. These are friendships made easy. SpeakEasy. </p>
+            </div>
         </div>
     </div>
-    <div class="col-lg-4">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Last Name">
+</div>
+
+<div class="signup">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group input-group-lg" id="firstName">
+                    <input type="text" class="form-control" placeholder="First Name">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div>
+                    <div class="input-group input-group-lg" id="lastName">
+                        <input type="text" class="form-control" placeholder="Last Name">
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <div class="separator"></div>
+
+        <div class="row">
+            <div class="col-lg-center">
+                <div class="input-group input-group-lg" id="email">
+                    <input type="text" class="form-control" placeholder="E-mail Address">
+                </div>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <button class="btn btn-primary btn-lg" href="#" role="button" id="signupbtn">Sign Me Up for Alpha Testing!</button>
+
     </div>
 </div>
 

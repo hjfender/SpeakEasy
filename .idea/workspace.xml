@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bcefa17d-4894-4677-8688-63aa3d835007" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Pictures/LASTLOGO.JPG" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Pictures/borderlessBanner.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Pictures/emptybubble.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Pictures/newerlogo.JPG" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BootstrapTest.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="DELETED" beforePath="C:\Users\Valenti\Documents\SpeakEasy\speakeasy\SpeakEasy" afterPath="" />
+    <list default="true" id="bcefa17d-4894-4677-8688-63aa3d835007" name="Default" comment="Major changes made by condor. The website is coming together. No comments yet. I'll work on that later.">
       <change type="DELETED" beforePath="C:\Users\Valenti\Documents\SpeakEasy\speakeasy\condor was ehre.txt" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Homepage.html" afterPath="$PROJECT_DIR$/Homepage.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bootstrap-3.3.2-dist/bootstrap-3.3.2-dist/css/bootstrap-theme.css" afterPath="$PROJECT_DIR$/bootstrap-3.3.2-dist/bootstrap-3.3.2-dist/css/bootstrap-theme.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.css" afterPath="$PROJECT_DIR$/main.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="SpeakEasy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -47,8 +39,8 @@
       <file leaf-file-name="Homepage.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Homepage.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4256757" vertical-offset="314" max-vertical-offset="1054">
-              <caret line="37" column="177" selection-start-line="37" selection-start-column="177" selection-end-line="37" selection-end-column="177" />
+            <state vertical-scroll-proportion="0.5543478" vertical-offset="153" max-vertical-offset="1853">
+              <caret line="39" column="94" selection-start-line="39" selection-start-column="94" selection-end-line="39" selection-end-column="94" />
               <folding />
             </state>
           </provider>
@@ -57,8 +49,8 @@
       <file leaf-file-name="main.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="527">
-              <caret line="11" column="18" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="465" max-vertical-offset="1496">
+              <caret line="76" column="17" selection-start-line="76" selection-start-column="17" selection-end-line="76" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -76,26 +68,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-66.69231" vertical-offset="0" max-vertical-offset="1836">
               <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bootstrap.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bootstrap-3.3.2-dist/bootstrap-3.3.2-dist/css/bootstrap.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.448276" vertical-offset="67228" max-vertical-offset="111724">
-              <caret line="3969" column="10" selection-start-line="3969" selection-start-column="1" selection-end-line="3969" selection-end-column="10" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bootstrap-theme.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bootstrap-3.3.2-dist/bootstrap-3.3.2-dist/css/bootstrap-theme.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.1724138" vertical-offset="0" max-vertical-offset="8211">
-              <caret line="2" column="43" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -123,8 +95,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1616" />
-    <option name="height" value="916" />
+    <option name="width" value="1936" />
+    <option name="height" value="1096" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -218,18 +190,26 @@
       <option name="number" value="Default" />
       <updated>1425938274052</updated>
     </task>
+    <task id="LOCAL-00001" summary="Major changes made by condor. The website is coming together. No comments yet. I'll work on that later.">
+      <created>1425963591056</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1425963591057</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="916" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20833333" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -259,7 +239,8 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="Major changes made by condor. The website is coming together. No comments yet. I'll work on that later." />
+    <option name="LAST_COMMIT_MESSAGE" value="Major changes made by condor. The website is coming together. No comments yet. I'll work on that later." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -284,17 +265,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Pictures/borderlessBanner.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bootstrap-3.3.2-dist/bootstrap-3.3.2-dist/css/bootstrap.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-8.448276" vertical-offset="67228" max-vertical-offset="111724">
           <caret line="3969" column="10" selection-start-line="3969" selection-start-column="1" selection-end-line="3969" selection-end-column="10" />
           <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Pictures/borderlessBanner.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bootstrap-3.3.2-dist/bootstrap-3.3.2-dist/css/bootstrap-theme.css">
@@ -305,11 +286,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Pictures/emptybubble.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BootstrapTest.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-66.69231" vertical-offset="0" max-vertical-offset="1836">
@@ -318,18 +294,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Pictures/emptybubble.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="527">
-          <caret line="11" column="18" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="465" max-vertical-offset="1496">
+          <caret line="76" column="17" selection-start-line="76" selection-start-column="17" selection-end-line="76" selection-end-column="17" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Homepage.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4256757" vertical-offset="314" max-vertical-offset="1054">
-          <caret line="37" column="177" selection-start-line="37" selection-start-column="177" selection-end-line="37" selection-end-column="177" />
+        <state vertical-scroll-proportion="0.5543478" vertical-offset="153" max-vertical-offset="1853">
+          <caret line="39" column="94" selection-start-line="39" selection-start-column="94" selection-end-line="39" selection-end-column="94" />
           <folding />
         </state>
       </provider>

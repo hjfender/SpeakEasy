@@ -12,14 +12,72 @@
     margin-left: 25px;
     margin-right: 25px;
     background-repeat: no-repeat;
-    /*background-image: url("Pictures/");*/
+    /*background-image: url("http://www.featurepics.com/FI/Thumb300/20100507/Red-Brick-Wall-Background-1531723.jpg");*/
+    background-size: cover;
+}
+
+.container{
+    height: auto;
+    width: auto;
+    text-align:center;
+    margin: auto;
 }
 
 .navbar{
-    margin-top: -20px;
+    margin-top: -25px;
+    margin-left: -3px;
+    margin-right: -3px;
+    background-color: #56d7d4;
+    border-radius: 0;
+    border-top: 3px solid #7381ff;
+    border-bottom: 3px solid #7381ff;
+}
+
+.navbar a{
+    color: #7381ff;
 }
 
 .row{
     margin:auto;
 }
 
+#firstName{
+    float:right;
+    width: 25%;
+}
+
+#lastName{
+    float:left;
+    width: 25%;
+}
+
+#email{
+    width: 25.8%;
+    margin: auto;
+}
+
+.separator{
+    height: 5px;
+}
+
+.about{
+    background-color: #56d7d4;
+    border-top: 3px solid #7381ff;
+    border-bottom: 3px solid #7381ff;
+    margin-bottom: 60px;
+}
+
+.about p{
+    font-size: 15px;
+    font-family:cursive;
+}
+
+.aboutsymbol{
+    width:200px;
+    height:200px;
+}
+
+#signupbtn{
+    background-color: #7381ff;
+    border: 2px solid black;
+}

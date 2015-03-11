@@ -112,9 +112,9 @@
 ?>
 
 <form id = "err_form" method = "post" action = "<?php echo $redirectPage ?>">
-	 <input type = "text" value = "<?php echo $firstNameErr; ?>" id = "firstNameErr" >
-	 <input type = "text" value = "<?php echo $lastNameErr; ?>" id = "lastNameErr" >
-	 <input type = "text" value = "<?php echo $emailErr; ?>" id = "emailErr" >
+	 <input type = "text" value = "<?php echo $firstNameErr; ?>" name = "firstNameErr" >
+	 <input type = "text" value = "<?php echo $lastNameErr; ?>" name = "lastNameErr" >
+	 <input type = "text" value = "<?php echo $emailErr; ?>" name = "emailErr" >
 </form>
 
 <script type="text/javascript">

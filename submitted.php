@@ -2,14 +2,15 @@
 <head><title>Submitted Form</title></head>
 <body>
 <?php
-	$firstNameErr = "";
-	$lastNameErr = "";
-	$emailErr = "";
+	$firstNameErr = " ";
+	$lastNameErr = " ";
+	$emailErr = " ";
 	
 	$redirectPage = "thanks.html";
 	
 	function insertData($first, $last, $email)
 	{
+		global $emailErr;
 		$serverfirst = "localhost";
 		$userfirst = "macse_form";
 		$password = "phpdataentry";
@@ -27,7 +28,7 @@
 		$sql = "INSERT INTO initialcollection (first,last,email) VALUES ('$first','$last', '$email')";
 		if($conn ->query($emailQuery)->num_rows > 0){
 			$emailErr = "Email already registered";
-			$redirectPage = "Homepage.html";
+			$redirectPage = "index.php";
 		} else if ($conn->query($sql) === TRUE) {
 			echo "New record created successfully";
 		} else {
@@ -55,36 +56,39 @@
 		$toClean = str_replace("'","",$toClean);
 		return $toClean;
 	}
-	
+
 	//Called when an invalid first name is entered
 	function invalidFirstName($userFirst)
 	{
+		global $firstNameErr;
 		$firstNameErr = "Invalid First Name";
-		echo "something";
 	}
 	
 	//Called when an invalid first name is entered
-	function invalidLastName($userFirst)
+	function invalidLastName($userLast)
 	{
+		global $lastNameErr;
 		$lastNameErr = "Invalid Last Name";
 	}
 	
 	//Called when an invalid first name is entered
 	function invalidEmail($userFirst)
 	{
+		global $emailErr;
 		$emailErr = "Invalid email. Must end in '@macalester.edu'.";
 	}
 	//Called when no or not enough data is received
 	function noDataSent() 
 	{
+		global $emailErr;
 		$emailErr = "Please Fill All Fields";
 	}
 	
 	//Check to make sure first and email sent
-	if(isset($_POST['first']) && isset($_POST['last']) && isset($_POST['email']))	{
+	if(isset($_POST['firstName']) && isset($_POST['lastName']) && isset($_POST['email']))	{
 		//Load userfirst and email
-		$userFirst = clean(htmlspecialchars($_POST['first']));
-		$userLast = clean(htmlspecialchars($_POST['last']));
+		$userFirst = clean(htmlspecialchars($_POST['firstName']));
+		$userLast = clean(htmlspecialchars($_POST['lastName']));
 		$userEmail = clean(htmlspecialchars($_POST['email']));
 		//Verify the data is valid
 		$validInput = TRUE;
@@ -94,21 +98,22 @@
 		} 
 		if(!isValidName($userLast)) {
 			$validInput = FALSE;
-			invalidFirstName($userFirst);
+			invalidLastName($userLast);
 		}
 		if(!isValidEmail($userEmail)) {
 			$validInput = FALSE;
-			invalidFirstName($userFirst);
+			invalidEmail($userEmail);
 		}
 		if($validInput)	{
 			insertData($userFirst,$userLast,$userEmail);
 		} else{
-			$redirectPage = "index.html";
+			$redirectPage = "index.php";
 		}
 	} else {
 		noDataSent();
-		$redirectPage = "index.html";
+		$redirectPage = "index.php";
 	}
+	
 ?>
 
 <form id = "err_form" method = "post" action = "<?php echo $redirectPage ?>">

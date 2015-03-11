@@ -6,7 +6,7 @@
 	$lastNameErr = " ";
 	$emailErr = " ";
 	
-	$redirectPage = "thanks.html";
+	$redirectPage = "interests.html";
 	
 	function insertData($first, $last, $email)
 	{
@@ -28,7 +28,7 @@
 		$sql = "INSERT INTO initialcollection (first,last,email) VALUES ('$first','$last', '$email')";
 		if($conn ->query($emailQuery)->num_rows > 0){
 			$emailErr = "Email already registered";
-			$redirectPage = "index.php";
+			$redirectPage = "Homepage.html";
 		} else if ($conn->query($sql) === TRUE) {
 			echo "New record created successfully";
 		} else {

@@ -103,11 +103,11 @@
 		if($validInput)	{
 			insertData($userFirst,$userLast,$userEmail);
 		} else{
-			$redirectPage = "Homepage.html";
+			$redirectPage = "index.html";
 		}
 	} else {
 		noDataSent();
-		$redirectPage = "Homepage.html";
+		$redirectPage = "index.html";
 	}
 ?>
 

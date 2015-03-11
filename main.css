@@ -1,3 +1,8 @@
+body{
+    background-image: url("Pictures/Background.png");
+    background-size: cover;
+}
+
 .page-header{
     background-color: #56d7d4;
     text-align:center;
@@ -9,11 +14,16 @@
 .jumbotron {
     text-align: center;
     border-radius: 15px;
-    margin-left: 25px;
-    margin-right: 25px;
+    /*margin-left: 25px;
+    margin-right: 25px;*/
+    width: 77%;
+    margin: auto;
+    margin-top: 5%;
     background-repeat: no-repeat;
-    /*background-image: url("http://www.featurepics.com/FI/Thumb300/20100507/Red-Brick-Wall-Background-1531723.jpg");*/
+    /*background-image: url("Pictures/mackagin.jpg");*/
     background-size: cover;
+    opacity: 1;
+    background-color: white;
 }
 
 .container{
@@ -31,6 +41,20 @@
     border-radius: 0;
     border-top: 3px solid #7381ff;
     border-bottom: 3px solid #7381ff;
+    color: black;
+}
+
+.btn{
+    background-color: #56d7d4;
+    border: 2px solid black;
+}
+
+.aboutBox{
+    text-align:center;
+    background-color: white;
+    width: auto;
+    height: 100%;
+    border-radius: 20px;
 }
 
 .navbar a{
@@ -61,9 +85,9 @@
 }
 
 .about{
-    background-color: #56d7d4;
+    /*background-color: #56d7d4;
     border-top: 3px solid #7381ff;
-    border-bottom: 3px solid #7381ff;
+    border-bottom: 3px solid #7381ff;*/
     margin-bottom: 60px;
 }
 
@@ -75,9 +99,4 @@
 .aboutsymbol{
     width:200px;
     height:200px;
-}
-
-#signupbtn{
-    background-color: #7381ff;
-    border: 2px solid black;
 }

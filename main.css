@@ -1,5 +1,5 @@
 body{
-    background-image: url("Pictures/Background.png");
+    background-image: url("imgs/Background.png");
     background-size: cover;
 }
 
@@ -9,6 +9,7 @@ body{
     margin-top: -1px;
     margin-left: -7px;
     margin-right: -7px;
+    opacity: .8;
 }
 
 .jumbotron {
@@ -24,6 +25,7 @@ body{
     background-size: cover;
     opacity: 1;
     background-color: white;
+    border: 40px solid #56d7d4;
 }
 
 .container{
@@ -35,13 +37,13 @@ body{
 
 .navbar{
     margin-top: -25px;
-    margin-left: -3px;
-    margin-right: -3px;
     background-color: #56d7d4;
     border-radius: 0;
     border-top: 3px solid black;
     border-bottom: 3px solid black;
     color: black;
+    opacity: .8;
+    width: 100%;
 }
 
 .btn{
@@ -67,16 +69,16 @@ body{
 
 #firstName{
     float:right;
-    width: 25%;
+    width: 28%;
 }
 
 #lastName{
     float:left;
-    width: 25%;
+    width: 28%;
 }
 
 #email{
-    width: 25.8%;
+    width: 29.2%;
     margin: auto;
 }
 
@@ -99,4 +101,11 @@ body{
 .aboutsymbol{
     width:200px;
     height:200px;
+}
+.leftCheckbox{
+    float: right;
+}
+
+.rightCheckbox{
+    float: left;
 }

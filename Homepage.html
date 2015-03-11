@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <html>
+
+<?php
+	echo $_POST['firstNameErr'];
+	if(isset($_POST['$firstNameErr']) && isset($_POST['$lastNameErr']) && isset($_POST['$emailErr'])){
+		$firstNameErr = $_POST['firstNameErr'];
+		$lastNameErr = $_POST['lastNameErr'];
+		$emailErr = $_POST['emailErr'];
+	} else{
+		$firstNameErr = "";
+		$lastNameErr = "";
+		$emailErr = "";
+	}
+?>
+
 <head lang="en">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="main.css"/>
@@ -53,12 +67,14 @@
                     <div class="col-lg-6">
                         <div class="input-group input-group-lg" id="firstName">
                             <input type="text" class="form-control" placeholder="First Name">
+							<span class = "error" style = "color:red"> <?php echo $firstNameErr ?></span> <!--error message -->
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div>
                             <div class="input-group input-group-lg" id="lastName">
                                 <input type="text" class="form-control" placeholder="Last Name">
+								<span class = "error" style = "color:red"> <?php echo $lastNameErr ?></span>
                             </div>
                         </div>
                     </div>
@@ -70,6 +86,7 @@
                     <div class="col-lg-center">
                         <div class="input-group input-group-lg" id="email">
                             <input type="text" class="form-control" placeholder="E-mail Address">
+							<span class = "error" style = "color:red"> <?php echo $emailErr ?></span>
                         </div>
                     </div>
                 </div>

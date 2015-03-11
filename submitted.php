@@ -33,7 +33,7 @@
 	//firsts may not contain numbers
 	function isValidName($name)
 	{
-		return "" !=== $name &&!preg_match("/[0-9]+/", $name);
+		return "" !== $name && !preg_match("/[0-9]+/", $name);
 	}
 	
 	//Email must end in @macalester.edu

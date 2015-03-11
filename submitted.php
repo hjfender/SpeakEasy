@@ -30,7 +30,7 @@
 		$conn -> close();
 	}
 	
-	//firsts may not contain numbers
+	//Names may not contain numbers
 	function isValidName($name)
 	{
 		return "" !== $name && !preg_match("/[0-9]+/", $name);

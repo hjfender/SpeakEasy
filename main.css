@@ -39,8 +39,8 @@ body{
     margin-right: -3px;
     background-color: #56d7d4;
     border-radius: 0;
-    border-top: 3px solid #7381ff;
-    border-bottom: 3px solid #7381ff;
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
     color: black;
 }
 
@@ -58,7 +58,7 @@ body{
 }
 
 .navbar a{
-    color: #7381ff;
+    color: #ffffff;
 }
 
 .row{

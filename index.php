@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="main.css"/>
     <meta charset="UTF-8">
     <title>SpeakEasy</title>
+	<link rel="shortcut icon" href="favicon.ico" type="image/icon" />
 </head>
 <body>
 
@@ -43,8 +44,8 @@
                 <li><a href="#about">About</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Register</a></li>
-                <li><a href="#">Login</a></li>
+               <!-- <li><a href="#">Register</a></li>
+                <li><a href="#">Login</a></li>-->
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -56,7 +57,7 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                <p class="center-text">We're currently looking for alpha testers for our next few months of development. If you're interested in being a part of the newest way to connect on college campuses, then join us!</p>
+                <p class="center-text">If you'd like to get involved with SpeakEasy, then join us!</p>
             </div>
         </div>
         <!--<p><a class="btn btn-primary btn-lg" href="#" role="button"> Sign Up!</a></p>-->
@@ -64,13 +65,13 @@
             <form action="submitted.php" method="post">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6 col-xs-6">
                         <div class="input-group input-group-lg" id="firstName">
                             <input type="text" class="form-control" placeholder="First Name" name = "firstName">
 							<span class = "error" style = "color:red"> <?php echo $firstNameErr; ?></span> <!--error message -->
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6 col-xs-6">
                         <div>
                             <div class="input-group input-group-lg" id="lastName">
                                 <input type="text" class="form-control" placeholder="Last Name" name = "lastName">
@@ -83,7 +84,8 @@
                 <div class="separator"></div>
 
                 <div class="row">
-                    <div class="col-lg-center">
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-6">
                         <div class="input-group input-group-lg" id="email">
                             <input type="text" class="form-control" placeholder="E-mail Address" name = "email">
 							<span class = "error" style = "color:red"> <?php echo $emailErr; ?></span>
@@ -95,7 +97,7 @@
                 <div class="separator"></div>
                 <div class="separator"></div>
 
-                <button class="btn btn-primary btn-lg" href="#" role="button">Sign Me Up for Alpha Testing!</button>
+                <button class="btn btn-primary btn-lg" href="#" role="button">Sign Me Up!</button>
 
             </div>
             </form>
@@ -111,7 +113,7 @@
                 <div class="row">
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
-                        <h3>We think there's a better way to connect to people than just profile pictures and a swipe. If you agree and want to join our experiment, sign up below!</h3>
+                        <h3>We think there's a better way to connect to people than just profile pictures and a swipe. If you agree and want to join our experiment, sign up above!</h3>
                     </div>
                 </div>
             </div>

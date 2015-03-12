@@ -6,7 +6,7 @@
 	$lastNameErr = " ";
 	$emailErr = " ";
 	
-	$redirectPage = "interests.html";
+	$redirectPage = "interests.php";
 	
 	function insertData($first, $last, $email)
 	{
@@ -23,16 +23,13 @@
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		} 
-		echo "<br />";
 		$emailQuery = "SELECT `email` FROM `initialcollection` WHERE `email` LIKE '$email'";
 		$sql = "INSERT INTO initialcollection (first,last,email) VALUES ('$first','$last', '$email')";
 		if($conn ->query($emailQuery)->num_rows > 0){
 			$emailErr = "Email already registered";
 			$redirectPage = "Homepage.html";
-		} else if ($conn->query($sql) === TRUE) {
-			echo "New record created successfully";
-		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+		} else if ($conn->query($sql) !== TRUE) {
+			echo "No data registered";
 		}
 		$conn -> close();
 	}
@@ -89,6 +86,7 @@
 		//Load userfirst and email
 		$userFirst = clean(htmlspecialchars($_POST['firstName']));
 		$userLast = clean(htmlspecialchars($_POST['lastName']));
+		global $userEmail;
 		$userEmail = clean(htmlspecialchars($_POST['email']));
 		//Verify the data is valid
 		$validInput = TRUE;
@@ -117,9 +115,10 @@
 ?>
 
 <form id = "err_form" method = "post" action = "<?php echo $redirectPage ?>">
-	 <input type = "text" value = "<?php echo $firstNameErr; ?>" name = "firstNameErr" >
-	 <input type = "text" value = "<?php echo $lastNameErr; ?>" name = "lastNameErr" >
-	 <input type = "text" value = "<?php echo $emailErr; ?>" name = "emailErr" >
+	 <input type = "hidden" value = "<?php echo $userEmail; ?>" name = "email">
+	 <input type = "hidden" value = "<?php echo $firstNameErr; ?>" name = "firstNameErr" >
+	 <input type = "hidden" value = "<?php echo $lastNameErr; ?>" name = "lastNameErr" >
+	 <input type = "hidden" value = "<?php echo $emailErr; ?>" name = "emailErr" >
 </form>
 
 <script type="text/javascript">

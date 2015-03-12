@@ -1,70 +1,67 @@
-<div class="container">
-        <h1>Please select the topics below that interest you:</h1>
-        <form action="interestsform.php" method="post">
-            <div class="row">
-                <div class="col-lg-6">
+<div class="row">
+                <div class="col-lg-6 col-xs-6">
                     <div class="leftCheckbox">
-                        <label>Catcher in the Rye   <input type="checkbox" value="Catcher in the Rye" name="Catcher in the Rye"> </label>
+                        <label>Catcher in the Rye   <input id="catcher" type="checkbox" value="catcher" name="checkboxvar[]"> </label>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-xs-6">
                     <div class="rightCheckbox">
-                        <label><input type="checkbox" value="Blank Space" name="Blank Space"> Blank Space - Taylor Swift</label>
+                        <label><input id="blank" type="checkbox" value="blank" name="checkboxvar[]"> Blank Space - Taylor Swift</label>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-xs-6">
                     <div class="leftCheckbox">
-                        <label>Soccer  <input type="checkbox" value="Soccer" name="Soccer">  </label>
+                        <label>Soccer  <input id="soccer" type="checkbox" value="soccer" name="checkboxvar[]">  </label>
                     </div> 
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-xs-6">
                     <div class="rightCheckbox">
-                        <label><input type="checkbox" value="Science" name="Science"> Science</label>
+                        <label><input id="science" type="checkbox" value="science" name="checkboxvar[]"> Science</label>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-xs-6">
                     <div class="leftCheckbox">
-                        <label>Buzfeed Quizzes   <input type="checkbox" value="Buzzfeed Quizzes" name="Buzzfeed Quizzes"> </label>
+                        <label>Buzzfeed Quizzes   <input id="quizzes" type="checkbox" value="quizzes" name="checkboxvar[]"> </label>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-xs-6">
                     <div class="rightCheckbox">
-                        <label><input type="checkbox" value="2016 Presidential Election" name="2016 Presidential Election"> 2016 Presidential Election</label>
+                        <label><input id="election" type="checkbox" value="election" name="checkboxvar[]"> 2016 Presidential Election</label>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-xs-6">
                     <div class="leftCheckbox">
-                        <label>Cat Videos   <input type="checkbox" value="Cat Videos" name="Cat Videos"> </label>
+                        <label>Cat Videos   <input id="catvideos" type="checkbox" value="catvideos" name="checkboxvar[]"> </label>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-xs-6">
                     <div class="rightCheckbox">
-                        <label><input type="checkbox" value="Harry Potter" name="Harry Potter"> Harry Potter</label>
+                        <label><input id="harrypotter" type="checkbox" value="harrypotter" name="checkboxvar[]"> Harry Potter</label>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-xs-6">
                     <div class="leftCheckbox">
-                        <label>Music   <input type="checkbox" value="Music" name="Music"> </label>
+                        <label>Music   <input id="music" type="checkbox" value="music" name="checkboxvar[]"> </label>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-xs-6">
                     <div class="rightCheckbox">
-                        <label><input type="checkbox" value="Housing" name="Housing"> Housing</label>
+                        <label><input id="housing" type="checkbox" value="housing" name="checkboxvar[]"> Housing</label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="input-group">
                     <span class="input-group-addon" id="basic-addon1">Put in one of your own!</span>
-                    <input type="text" class="form-control" placeholder="Write topic here" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control" placeholder="Write topic here" name="custom" aria-describedby="basic-addon1">
                 </div>
             </div>
 
@@ -75,5 +72,5 @@
             <div class="separator"></div>
 
             <button class="btn btn-primary btn-lg" href="#" role="button">Submit</button>
-        </form>
-    </div>
+		</div>
+	</form>

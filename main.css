@@ -59,8 +59,8 @@ body{
     border-radius: 20px;
 }
 
-.navbar a{
-    color: #ffffff;
+.navbar-brand{
+    color:white;
 }
 
 .row{
@@ -69,16 +69,16 @@ body{
 
 #firstName{
     float:right;
-    width: 28%;
+    width: auto;
 }
 
 #lastName{
     float:left;
-    width: 28%;
+    width: auto;
 }
 
 #email{
-    width: 29.2%;
+    width: 75%;
     margin: auto;
 }
 
@@ -95,7 +95,6 @@ body{
 
 .about p{
     font-size: 15px;
-    font-family:cursive;
 }
 
 .aboutsymbol{
@@ -108,4 +107,12 @@ body{
 
 .rightCheckbox{
     float: left;
+}
+
+.navbar a:link{
+    color: white;
+}
+
+.nav a{
+    color: white;
 }

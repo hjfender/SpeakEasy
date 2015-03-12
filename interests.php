@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="main.css"/>
     <meta charset="UTF-8">
     <title>Interests</title>
+	<link rel="shortcut icon" href="favicon.ico" type="image/icon" />
 </head>
 <body>
 <div class = "page-header"><img src="imgs/LASTLOGO.JPG"/></div>
@@ -28,8 +29,8 @@
                 <li><a href="#about">About</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Register</a></li>
-                <li><a href="#">Login</a></li>
+            <!--    <li><a href="#">Register</a></li>
+                <li><a href="#">Login</a></li> -->
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -37,7 +38,17 @@
 
 <div class="jumbotron">
     <?php
-		$htmlToDisplay = readFile("interests_form.html");
+	if(isset($_POST['email'])) {
+		$begin = '<div class="container">
+        <h1>Please select the topics below that you would be interested in talking about:</h1>
+		<form action="thanks.php" method="post">';
+		$formBegin = "<input type='hidden' name='email' value='".$_POST['email']."'>";
+		$htmlToDisplay = file_get_contents("interests_form.html");
+		$htmlToDisplay = $begin.$formBegin.$htmlToDisplay;
+		echo $htmlToDisplay;
+	} else {
+		$htmlToDisplay = readfile("interests_error.html");
+	}
 	?>
 </div>
 

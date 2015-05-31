@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation>
+	<title>Speak Easy API</title>
+	<standard>
+		<required>
+			<input>
+				<key>function</key>
+				<description>Function to be run</description>
+			</input>
+		</required>
+		<output>
+			<on_success>
+				<output>
+					<key>success</key>
+					<description>If the function executed correctly or ran into an error</description>
+					<options>
+						<option>true</option>
+					</options>
+				</output>
+			</on_success>
+			<on_failure>
+				<output>
+					<key>success</key>
+					<description>If the function executed correctly or ran into an error</description>
+					<options>
+						<option>false</option>
+					</options>
+				</output>
+			</on_failure>
+		</output>
+	</standard>
+	<function>
+		<name>Send Message</name>
+		<command>send</command>
+		<required>
+			<input>
+				<key>name</key>
+				<description>Name used by sending user</description>
+			</input>
+			<input>
+				<key>message</key>
+				<description>Message to be sent</description>
+			</input>
+			<input>
+				<key>idOne</key>
+				<description>ID of the sending user</description>
+			</input>
+			<input>
+				<key>idTwo</key>
+				<description>ID of the receiving user</description>
+			</input>
+		</required>
+		<response>
+			<on_success>
+				<output>
+					<key>response</key>
+					<description>What successfully occurred</description>
+					<options>
+						<option>message sent</option>
+					</options>
+				</output>
+			</on_success>
+			<on_failure>
+			</on_failure>
+		</response>
+	</function>
+	<function>
+		<name>Create Chat</name>
+		<command>createChat</command>
+		<required>
+			<input>
+				<key>idOne</key>
+				<description>ID of the sending user</description>
+			</input>
+			<input>
+				<key>idTwo</key>
+				<description>ID of the receiving user</description>
+			</input>
+			<input>
+				<key>fileName</key>
+				<description>File name to store the create chat</description>
+			</input>
+		</required>
+		<response>
+			<on_success>
+				<output>
+					<key>response</key>
+					<description>What successfully occurred</description>
+					<options>
+						<option>chat created</option>
+					</options>
+				</output>
+			</on_success>
+			<on_failure>
+			</on_failure>
+		</response>
+	</function>
+	<function>
+		<name>Create Profile</name>
+		<command>createProfile</command>
+		<required>
+			<input>
+				<key>firstName</key>
+				<description>First name of the person whos profile is being created</description>
+			</input>
+			<input>
+				<key>lastName</key>
+				<description>Last name of the person whos profile is being created</description>
+			</input>
+			<input>
+				<key>email</key>
+				<description>Email of the person whos profile is being created</description>
+			</input>
+			<input>
+				<key>password</key>
+				<description>Password for the created account</description>
+			</input>
+		</required>
+		<response>
+			<on_success>
+				<output>
+					<key>response</key>
+					<description>What successfully occurred</description>
+					<options>
+						<option>new profile created</option>
+					</options>
+				</output>
+			</on_success>
+			<on_failure>
+				<output>
+					<key>error</key>
+					<description>What went wrong</description>
+					<options>
+						<option>unknown creation error</option>
+						<option>email already registered</option>
+					</options>
+				</output>
+			</on_failure>
+		</response>
+	</function>
+	<function>
+		<name>Retrieve Messages</name>
+		<command>retrieve</command>
+		<required>
+			<input>
+				<key>idOne</key>
+				<description>ID of the current user</description>
+			</input>
+			<input>
+				<key>idTwo</key>
+				<description>ID of the partner</description>
+			</input>
+		</required>
+		<optional>
+		</optional>
+		<response>
+			<on_success>
+				<output>
+					<key>text</key>
+					<description>If no messages found in time limit will be false, other wise will be the new messages as an array. See message format.</description>
+				</output>
+				<output>
+					<key>state</key>
+					<description>How many lines in the chat file the user should have</description>
+				</output>
+				<output>
+					<key>response</key>
+					<description>What successfully occurred</description>
+					<options>
+						<option>new messages found</option>
+						<option>no new messages found</option>
+					</options>
+				</output>
+			</on_success>
+			<on_failure>
+			</on_failure>
+		</response>
+	</function>
+	<function>
+		<name>Connect to chat</name>
+		<command>connect</command>
+		<required>
+			<input>
+				<key>emailOne</key>
+				<description>Email of current user</description>
+			</input>
+			<input>
+				<key>emailTwo</key>
+				<description>Email of the other user</description>
+			</input>
+		</required>
+		<optional>
+		</optional>
+		<response>
+			<on_success>
+				<output>
+					<key>idOne</key>
+					<description>ID of the user corresponding to emailOne</description>
+				</output>
+				<output>
+					<key>idTwo</key>
+					<description>ID of the user corresponding to emailTwo</description>
+				</output>
+				<output>
+					<key>response</key>
+					<description>What successfully occurred</description>
+					<options>
+						<option>found both emails</option>
+					</options>
+				</output>
+			</on_success>
+			<on_failure>
+				<output>
+					<key>error</key>
+					<description>What went wrong</description>
+					<options>
+						<option>profiles not found</option>
+					</options>
+				</output>
+			</on_failure>
+		</response>
+		<deprecated>
+			<reason>Used for initial chat-room testing. Not safe in any way</reason>
+		</deprecated>
+	</function>
+	<function>
+		<name>Get last N messages</name>
+		<command>retrieveLastN</command>
+		<required>
+			<input>
+				<key>chatID</key>
+				<description>Id of the chat retrieving messages from</description>
+			</input>
+			<input>
+				<key>numMessages</key>
+				<description>Number of messages requested</description>
+			</input>
+		</required>
+		<optional>
+		</optional>
+		<response>
+			<on_success>
+				<output>
+					<key>text</key>
+					<description>List of last N messages from the chat</description>
+				</output>
+				<output>
+					<key>response</key>
+					<description>What successfully occurred<description>
+					<options>
+						<option>retrieved last [n] messages</option>
+					</options>
+				</ouput>
+			</on_success>
+			<on_failure>
+				<output>
+					<key>error</key>
+					<description>What went wrong</description>
+					<options>
+						<option>chat not found</option>
+					</options>
+				</ouput>
+			</on_failure>
+		</response>
+	</function>
+</documentation>

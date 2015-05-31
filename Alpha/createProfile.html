@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script type="text/javascript">
+			function createProfile() {
+				var firstName = document.getElementById("first_name").value;
+				var lastName = document.getElementById("last_name").value;
+				var email = document.getElementById("email").value;
+				var password = document.getElementById("password").value;
+				console.log("Creating profile");
+				$.ajax({
+					type: "POST",
+					url: "backendDB.php",
+					data: {'function': 'createProfile','firstName': firstName,'lastName': lastName,'email': email,'password': password},
+					dataType: "json",
+					success: function(data){
+						console.log("Profile attempt completed");
+						var response = jQuery.parseJSON(data);
+						document.getElementById("response").innerHTML = "HELLO";
+						if (data.success == "true") {
+							document.getElementById("response").innerHTML = data.message;
+						} else {
+							document.getElementById("response").innerHTML = data.error;
+						}
+					}
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<form id="profile_form" action="javascript:createProfile()">
+			<div id="response"> </div>
+			<div>First Name: <input type="text" id="first_name"> </div>
+			<div>Last Name: <input type="text" id="last_name"> </div>
+			<div>Password: <input type="password" id="password"> </div>
+			<div>Email: <input type="text" id="email"> </div>
+			<div><input type="submit" id="submit"> </div>
+		</form>
+	</body>
+</html>

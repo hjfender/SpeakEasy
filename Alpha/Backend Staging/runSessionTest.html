@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Session Test</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script type="text/javascript">
+            function setValues() {
+                          $.ajax({
+      document.getElementById('status').innerHTML = "setting values";
+                    type: "GET",
+                    url: "sessionTest.php",
+                    data: {
+                        'function': "set",
+                        'color': "Blue",
+                        'cat': "Fred"
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        console.log(data);
+                        document.getElementById('status').innerHTML = "got response for setting values";
+                    }
+                });
+            }
+            function getValues() {
+                document.getElementById('status').innerHTML = "getting values";
+                $.ajax({
+                    type: "GET",
+                    url: "sessionTest.php",
+                    data: {
+                        'function': "get"
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        console.log(data);
+                        document.getElementById('status').innerHTML = "got response for getting values";
+                        document.getElementById('cat').innerHTML = data.cat;
+                        document.getElementById('color').innerHTML = data.color;
+                    }
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <div id="status">status</div>
+        <div id="color">the color</div>
+        <div id="cat">the cat</div>
+        <form action="javascript:setValues()">
+            <input type='submit' value='set'/>
+        </form>
+        <form action="javascript:getValues()">
+            <input type='submit' value='get' />
+        </form>
+    </body>
+</html>

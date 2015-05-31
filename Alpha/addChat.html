@@ -1,0 +1,30 @@
+<html>
+<head>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+	<script type="text/javascript">
+		function submitChat() {
+			var idOne = document.getElementById("idOne").value;
+			var idTwo = document.getElementById("idTwo").value;
+			var fileName = document.getElementById("fileName").value;
+			$.ajax({
+				type: "POST",
+				url: "backendDB.php",
+				data: {'function': 'add','idOne': idOne,'idTwo': idTwo,'fileName': fileName},
+				dataType: "json",
+				success: function(data){
+					document.getElementById("success").innerHTML = "Chat added";
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+	<div id="success"></div>
+	<form id="chatForm" action="javascript:submitChat()">
+		<input type="text" id="idOne">
+		<input type="text" id="idTwo">
+		<input type="text" id="fileName">
+		<input type="submit">
+	</form>
+</body>
+</html>

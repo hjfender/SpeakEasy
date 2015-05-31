@@ -1,0 +1,128 @@
+<html>
+	<head>
+		<!-- styles needed by jScrollPane -->
+		<link type="text/css" href="style/jquery.jscrollpane.css" rel="stylesheet" media="all" />
+
+		<!-- the mousewheel plugin - optional to provide mousewheel support -->
+		<script type="text/javascript" src="script/jquery.mousewheel.js"></script>
+
+		<!-- the jScrollPane script -->
+		<script type="text/javascript" src="script/jquery.jscrollpane.min.js"></script>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="main.css"/>
+		<meta charset="UTF-8">
+		<title>Chatroom</title>
+		<link rel="shortcut icon" href="favicon.ico" type="image/icon" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.js"></script>
+		<script type="text/javascript" src="chatInterface.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('#reveal').click(function(){
+					if(confirm("This will send a request to reveal ID to your partner. Are you sure you want to do this?")){
+						console.log("Hey");
+						revealId(); //This doesn't work yet. 
+					}
+				});
+				$('#reveal-menu').click(function(){
+					if(confirm("This will send a request to reveal ID to your partner. Are you sure you want to do this?")){
+						//send reveal request
+					}
+				});
+				$('#endChat').click(function(){
+					if(confirm("This will permenantly end your chat with this user. Are you sure you want to do this?")){
+						//delete chat somehow
+						window.location.href = "chats.html";
+					}
+				});
+				$('#endChat-menu').click(function(){
+					if(confirm("This will permenantly end your chat with this user. Are you sure you want to do this?")){
+						//delete chat somehow
+						window.location.href = "chats.html";
+					}					
+				});
+				$('.logout').click(function(){
+					if(confirm("Are you sure you wish to logout?")){
+						//add logout function here
+						window.location.href = "index.php";
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+    
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.php">SpeakEasy</a>
+			</div>
+
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li><a href="index.php">Home<span class="sr-only">(current)</span></a></li>
+					<li><a href="#">Topics</a></li>
+					<li><a href="chats.html">Chats</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<p class="navbar-text" id="userName">Signed in as</p>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Options <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="chats.html">Edit Profile</a></li>
+							<li><a href="#" id="reveal-menu">Reveal ID</a></li>
+							<li><a href="#" id="endChat-menu">End Chat</a></li>
+							<li class="divider"></li>
+							<li><a href="#" class="logout">Logout</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
+		<h1 class="heading">SpeakEasy Chatroom</h1>
+		<form id="chat-login" action="javascript:connectToChat()">
+			Enter your e-mail:<input type="text" id="emailOne"></input>
+			Enter your partner's email:<input type="text" id="emailTwo"></input>
+			Enter your first name:<input type="text" id="name"></input>
+			<button type="submit">Submit</button>
+		</form>
+		<div class="chatbox" id="chat-log">
+			<div class="chatbox" id="chat-area" style="overflow-y: scroll; height: 500px"></div>
+		</div>
+		<div class="separator"></div>
+		<div class="separator"></div>
+		<div class="separator"></div>
+		<div class="not-chatbox">
+			<div class="row">
+  				<div class="col-lg-8 col-lg-offset-2">
+					<div class="row">
+						<div class="col-lg-2" id="revealButton">
+							<button type="button" class="btn btn-default" id="reveal">Reveal ID</button>
+						</div>
+						<div class="col-lg-8">						
+							<form id="message-form" action="javascript:sendMessage()">
+							<div class="input-group">
+								<input type="text" class="form-control" placeholder="Enter chat here..." id="message" maxlength="128">
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="submit" id="submit">Send</button>
+								</span>
+							</div><!-- /input-group -->
+							</form>
+						</div>
+						<div class="col-lg-2">
+							<button type="button" class="btn btn-default" id="endChat">End Chat</button>
+						</div>
+					</div>
+  				</div><!-- /.col-lg-6 -->
+			</div><!-- /.row -->
+		</div>		
+	</body>
+</html>

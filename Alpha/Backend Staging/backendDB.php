@@ -116,6 +116,7 @@ function getChatByID($chat_id) {
     return $chat;
 }
 
+// <editor-fold defaultstate="collapsed" desc="Create Chat From IDs">
 /**
  * Gets POST data from Ajax request to create chat for given users
  * @param type $log Log for Javascript response
@@ -168,11 +169,14 @@ function createChat(&$log, $user_id_one, $user_id_two) {
     }
 }
 
+
 function addChatToUserFile($user_id, $chat_id) {
     $fileLoc = "userchats/" . $user_id . ".chats";
     fwrite(fopen($fileLoc, 'a'), $chat_id . "\n");
 }
+//</editor-fold>
 
+// <editor-fold defaultstate="collapsed" desc="Retrieve New Messages">
 function prepRetrieveNewMessages(&$log, $user_id) {
     if (count(checkSet(array("chatID", "state"))) != 0) {
         $log['success'] = "false";
@@ -220,7 +224,9 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
     $log['text'] = "false";
     $log['success'] = "true";
 }
+// </editor-fold>
 
+// <editor-fold defaultstate="collapsed" desc="Get User Chats by ID">
 //Add checks
 function getUserChats(&$log, $user_id) {
     $chat_ids = array();
@@ -233,7 +239,24 @@ function getUserChats(&$log, $user_id) {
     $log['success'] = "true";
     $log['response'] = "retrieved chat ids";
 }
-// <editor-fold defaultstate="collapsed" desc="Old Code">
+//</editor-fold>
+
+function prepRetrieveLastNMessages(&$log, $user_id) {
+    if (count(checkSet(array("chatID", "numMessages"))) != 0) {
+        missingInputs($log);
+        return;
+    }
+    
+    $chat_id = $_POST['chatID'];
+    $numMessages = $_POST['numMessages'];
+    
+    if(!userHasAccessToChat($user_id, $chat_id)) {
+        $log['success'] = "false";
+        $log['error'] = "no access";
+    }
+    
+    retrieveLastNMessages($log, $chat_id);
+}
 
 function retrieveLastNMessages(&$log) {
     if (count(checkSet(array("chatID", "numMessages"))) != 2) {
@@ -258,6 +281,23 @@ function retrieveLastNMessages(&$log) {
     $log['success'] = "true";
 }
 
+function userHasAccessToChat($user_id, $chat_id) {
+    $chatFileName = getChatFileName($user_id);
+    $chatFile = openf($chatFileName,'r');
+    foreach ($chatFile as $line) {
+        $line = str_replace("\n", "", $line);
+        if($line === $chat_id){
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+function getChatFileName($user_id) {
+    return "userchats/".$user_id.".chats";
+}
+
+// <editor-fold defaultstate="collapsed" desc="Old Code">
 function connectToChat(&$log) {
     if (count(checkSet(array("emailOne", "emailTwo"))) != 0) {
         missingInputs($log);
@@ -379,6 +419,11 @@ function getFileName($idOne, $idTwo) {
     return $results;
 }
 
+/**
+ * Checks to make sure array variables are set
+ * @param array $toCheck The Array to check set
+ * @return array Of unset variables
+ */
 function checkSet($toCheck) {
     $unchecked = array();
     foreach ($toCheck as $value) {

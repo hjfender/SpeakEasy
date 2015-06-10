@@ -1,0 +1,269 @@
+
+/*Scrollspy Stuff*/
+.scrollspy-fun {
+    position: relative;
+    top: 50px;
+
+    overflow: auto;
+    font-size: 28px;
+}
+
+h1 {
+    clear: both;
+}
+
+
+.center {
+    text-align: center;
+    width: 40%;
+    margin: 0 auto;
+}
+
+body{
+    font-family: Century Gothic, sans-serif;
+    background-color: white
+}
+
+.container{
+    height: auto;
+    width: auto;
+    text-align:center;
+    margin: auto;
+}
+
+/*Spacing*/
+.small-space {
+    height: 40px;
+}
+.big-space {
+    height: 250px;
+}
+
+/********* HOME SECTION *********/
+#Home {
+    height: 700px;
+    color: #fff;
+    background-image: url(http://www.freedownwallpaper.com/wp-content/uploads/2014/05/best-friends-forever-quotes-images-7.jpg);
+    width: 100%
+}
+
+/*
+COLORS FROM THE PICTURE:
+    Maroon: #7D1B52;
+    Navy: #00103B;
+    Greyish Blue: #70A09B;
+*/
+
+.title {
+    text-align: left;
+    color: white;
+    font-size: 145px;
+    margin-top: 150px;
+    margin-left: 50px;
+}
+
+.subtitle {
+    text-align: left;
+    color: white;
+    margin-bottom: 30px;
+    font-size: 60px;
+    margin-left: 60px;
+}
+
+
+/* Buttons for sign up */
+#buttons {
+    width:500px;
+}
+
+.buttons-positioning {
+    margin-left: 60px
+}
+
+.home-buttons {
+    height:50px;
+    width: 210px;
+    color:black;
+    background-color: white;
+    font-size: 25px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+.start-hidden {
+    display: none;
+}
+
+.sign-up-extension {
+    height: 300px;
+    background-color: white;
+}
+
+/*The email dropdown*/
+/* Popover */
+.popover {
+    border-color: #000037;
+    border-style: solid;
+    border:10px;
+}
+
+/* Popover Header */
+.popover-title {
+    background-color: #000037;
+    color: white;
+    font-size: 35px;
+    text-align:center;
+}
+
+/* Popover Body */
+.popover-content {
+    background-color: white;
+    color: black;
+    padding: 25px;
+}
+
+#learn-more-button {
+    font-size: 25px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    text-align: center;
+    color:white;
+    border-color: #440022;
+    background-color: #440022;
+}
+
+label {
+    margin-top: 10px;
+}
+
+.box {
+    float: right;
+    width: 100px;
+    height: 100px;
+}
+
+/********* How It Works SECTION *********/
+#HowItWorks {
+    color: #440022;
+    background-color: white;
+}
+.center-info-bubbles {
+    width:80%;
+    margin: 0 auto;
+}
+
+.info-bubbles {
+    margin-right: 30px;
+    margin-left: 30px;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    width: 250px;
+    height: 250px;
+}
+
+.bubble-text {
+    width:250px;
+    height: 250px;
+    margin-right: 30px;
+    margin-left: 30px;
+    margin-bottom: 30px;
+    margin-top: 10px;
+    background-color: #440022;
+    /*background-color: #00103B; */
+    color: white;
+    font-size: 16px;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-top: 5px !important;
+    padding-bottom: 20px !important;
+}
+
+/*These are special for bubbles when the screen is narrower*/
+.narrow-info-bubbles {
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: 250px;
+    height: 250px;
+}
+
+.narrow-bubble-text {
+    width:250px;
+    height: 250px;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    background-color: #440022;
+    color: white;
+    font-size: 16px;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-top: 5px !important;
+    padding-bottom: 20px !important;
+}
+
+.narrow-center {
+    left-margin: auto;
+    margin: 0 auto;
+    width: 80%
+
+}
+
+/********* ABOUT US SECTION *********/
+#AboutUs {
+    /*color: #440022; */
+    /*color: #00103B; */
+    color: white;
+    background-image: url(http://cdn.desktopwallpapers4.me/wallpapers/abstract/1366x768/1/5320-wood-floor-1366x768-abstract-wallpaper.jpg);
+    /*background-color: #add8e6;*/
+}
+
+/*Video*/
+.center-video {
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.video {
+    width :685px;
+    height: 435px;
+    padding: 1px;
+    border: 20px solid black;
+}
+
+/*For our profiles*/
+.pic-center {
+    text-align: center;
+    margin: 0 auto;
+}
+
+#macathon-pic {
+    width:80%;
+    height: auto;
+}
+
+/********* CONTACT US SECTION *********/
+#ContactUs {
+    background-image: url(http://i.huffpost.com/gen/1757823/images/o-HOLDING-HANDS-facebook.jpg);
+    color:white;
+}
+
+.contact-us {
+    text-align: left;
+    font-size: 50px;
+    margin-left: 20px;
+}
+
+#sm-icon-fb {
+    width:200px;
+    margin-left: 20px;
+
+}
+#sm-icon-tw {
+    width:215px;
+    margin-left: 20px;
+}
+

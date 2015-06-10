@@ -233,6 +233,7 @@ function getUserChats(&$log, $user_id) {
     $log['success'] = "true";
     $log['response'] = "retrieved chat ids";
 }
+// <editor-fold defaultstate="collapsed" desc="Old Code">
 
 function retrieveLastNMessages(&$log) {
     if (count(checkSet(array("chatID", "numMessages"))) != 2) {
@@ -396,5 +397,6 @@ function missingInputs(&$log) {
 function getFileLocation($fileName) {
     return "chats/" . $fileName . ".txt";
 }
+// </editor-fold>
 
 ?>

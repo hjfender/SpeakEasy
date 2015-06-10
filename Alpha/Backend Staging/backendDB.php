@@ -29,8 +29,8 @@ function executeFunction($command, $user_id, &$log) {
         sendMessage($log, $user_id);
     } else if ($command == 'createChat') {
         createChatByEmails($log);
-    } else if ($command == 'retrieve') {
-        retrieveMessages($log);
+    } else if ($command == 'retrieveLastN') {
+        prepRetrieveLastNMessages($log,$user_id);
     } else if ($command == 'connect') {
         error_log("Connecting to chat");
         connectToChat($log);

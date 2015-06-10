@@ -24,6 +24,13 @@ if (!isset($_POST['token'])) {
     exit;
 }
 
+
+/**
+ * Executes the command requested by the frontend
+ * @param type $command Command to execute
+ * @param type $user_id ID of current user, retrieved using token
+ * @param type $log Array for response to javascript
+ */
 function executeFunction($command, $user_id, &$log) {
     if ($command == 'send') {
         sendMessage($log, $user_id);

@@ -1,0 +1,105 @@
+<html>
+	<head>		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script type="text/javascript">
+			var token = 7;
+			function login() {
+				document.getElementById("login_info").innerHTML = "Logging in";
+				var email = document.getElementById("email").value;
+				var password = document.getElementById("password").value;
+				$.ajax({
+					type: "POST",
+					url: "sessionHandler.php",
+					data: {
+						'function': 'login',
+						'email': email, 
+						'password': password
+					},
+					dataType: "json",
+					success: function(data) {
+						if(data.success == "true") {
+							token = data.token; 
+							document.getElementById("login_info").innerHTML = "Logged in with token: " + token; 
+						} else {
+							document.getElementById("login_info").innerHTML = data.error; 
+						}
+					}
+				});
+			}
+			
+			function loadChats() {
+				document.getElementById("retrieve_info").innerHTML = "Getting chats";
+				$.ajax({
+					type: "POST",
+					url: "sessionHandler.php",
+					data: {
+						'function': 'retrieveChats',
+						'token': token
+					},
+					dataType: 'json',
+					success: function(data) {
+						if(data.success == "true") {
+							document.getElementById("messages").innerHTML = "";
+							document.getElementById("retrieve_info").innerHTML = "Got chats";
+							console.log(data.messages);
+							var arr = Object.keys(data.messages).map(function(k) { return data.messages[k] });
+							for(id in arr) {
+								document.getElementById("messages").innerHTML += "<div id=" + id + " onclick='loadMessages(this)'>" + arr[id] + "</div>";
+							}
+						} else {
+							document.getElementById("retrieve_info").innerHTML = data.error;
+						}
+					}
+				});
+			}
+			
+			function loadMessages(div) {
+				document.getElementById("retrieve_messages_info").innerHTML = "Getting messages for chat " + div.innerHTML;
+				$.ajax({
+					type: "POST",
+					url: "sessionHandler.php",
+					data: {
+						'function': 'retrieveMessages',
+						'token': token,
+						'chatID': div.innerHTML
+					},
+					dataType: 'json',
+					success: function(data) {
+						document.getElementById("messages").innerHTML = "";
+						if(data.success == "true") {
+							for (var i = 0; i < data.text.length; i++) {
+								console.log(data.text[i].substring(0,6+name.length));
+								document.getElementById("messages").innerHTML += "<p>"+ data.text[i] +"</p>";
+								j = j + 1;
+							}
+						} else {
+							document.getElementById("retrieve_messages_info").innerHTML = data.error;
+						}
+					}
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<div id="login_info">Log in to SpeakEasy!</div>
+		<form id="login_form" action="javascript:login()"
+			<div>
+				Email: <input type="text" id="email" />
+			</div>
+			<div>
+				Password: <input type="password" id="password" />
+			</div>
+			<div>
+				<input type="submit" />
+			</div>
+		</form>
+		<div id="retrieve_info"> </div>
+		<form id="retrieve_messages_form" action="javascript:loadChats()">
+			<input type="text" />
+			<input type="submit" />
+		</form>
+		<div id="retrieve_messages_info"> </div>
+		<div id="messages">
+		</div>
+	</body>
+</html>

@@ -258,34 +258,26 @@ function prepRetrieveLastNMessages(&$log, $user_id) {
     retrieveLastNMessages($log, $chat_id);
 }
 
-function retrieveLastNMessages(&$log) {
-    if (count(checkSet(array("chatID", "numMessages"))) != 2) {
-        missingInputs($log);
-        return;
-    }
-
-    $chatID = $_POST['chatID'];
-    $numMessages = $_POST['numMessages'];
-    $fileName = "chats/" . retrieveFileNamesByChatID($chatID);
-
-    $count = count($fileName);
-    $start = $count - $numMessages;
+function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
+    $fileName = getChatFileName($chat_id);
+    $chat = open($fileName);
+    $count = count($chat);
+    $start = $count - $num_messages;
     $text = array();
-    foreach ($lines as $line_num => $line) {
+    foreach ($chat as $line_num => $line) {
         if ($line_num >= $start) {
             $text[] = $line = str_replace("\n", "", $line);
         }
     }
-
     $log['text'] = $text;
     $log['success'] = "true";
 }
 
 function userHasAccessToChat($user_id, $chat_id) {
-    $chatFileName = getChatFileName($user_id);
+    $chatFileName = getUserChatsFileName($user_id);
     $chatFile = openf($chatFileName,'r');
-    foreach ($chatFile as $line) {
-        $line = str_replace("\n", "", $line);
+    while(feof($chatFile)) {
+        $line = str_replace("\n", "", fgets($chatFile));
         if($line === $chat_id){
             return TRUE;
         }
@@ -293,8 +285,12 @@ function userHasAccessToChat($user_id, $chat_id) {
     return FALSE;
 }
 
-function getChatFileName($user_id) {
+function getUserChatsFileName($user_id) {
     return "userchats/".$user_id.".chats";
+}
+
+function getChatFileName($chat_id) {
+    return "chats/".$chat_id.".txt";
 }
 
 // <editor-fold defaultstate="collapsed" desc="Old Code">

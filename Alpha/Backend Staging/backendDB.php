@@ -102,27 +102,7 @@ function sendMessage(&$log, $user_id, $chat_id, $message) {
     $log['response'] = "message sent";
 }
 
-/**
- * Fetches the chat data from the database based on chat ID
- * @param string $chat_id ID of chat
- * @return FALSE if no chat exists for that ID, otherwise array with chat data
- */
-function getChatByID($chat_id) {
-    $query = "SELECT * FROM `chats` WHERE `id` = '$chat_id'";
-    $conn = connectToDatabase();
-    $results = $conn->query($query);
-    if ($results->num_rows == 0) {
-        return FALSE;
-    }
-    $chat = array();
-    $results_array = $results->fetch_array();
-    $chat['chatID'] = $results_array[0];
-    $chat['userOneID'] = $results_array[1];
-    $chat['userTwoID'] = $results_array[2];
-    $chat['fileName'] = $results_array[3];
-    return $chat;
-}
-
+// <editor-fold defaultstate="collapsed" desc="Executable Functions">
 // <editor-fold defaultstate="collapsed" desc="Create Chat From IDs">
 /**
  * Gets POST data from Ajax request to create chat for given users
@@ -233,21 +213,7 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
 }
 // </editor-fold>
 
-// <editor-fold defaultstate="collapsed" desc="Get User Chats by ID">
-//Add checks
-function getUserChats(&$log, $user_id) {
-    $chat_ids = array();
-    $fileLoc = "userchats/" . $user_id . ".chats";
-    $file = file($fileLoc);
-    foreach ($file as $line_num => $line) {
-            $chat_ids[] = $line = str_replace("\n", "", $line);
-    }
-    $log['chatIDs'] = $chat_ids;
-    $log['success'] = "true";
-    $log['response'] = "retrieved chat ids";
-}
-//</editor-fold>
-
+// <editor-fold defaultstate="collapsed" desc="Get Last N Messages">
 function prepRetrieveLastNMessages(&$log, $user_id) {
     if (count(checkSet(array("chatID", "numMessages"))) != 0) {
         missingInputs($log);
@@ -255,21 +221,20 @@ function prepRetrieveLastNMessages(&$log, $user_id) {
     }
     
     $chat_id = $_POST['chatID'];
-    $numMessages = $_POST['numMessages'];
+    $num_messages = $_POST['numMessages'];
     
     if(!userHasAccessToChat($user_id, $chat_id)) {
         $log['success'] = "false";
         $log['error'] = "no access";
-    }
-    
-    retrieveLastNMessages($log, $chat_id);
+        return;
+    } 
+    retrieveLastNMessages($log, $chat_id, $num_messages);
 }
 
 function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
     $fileName = getChatFileName($chat_id);
     $chat = open($fileName);
-    $count = count($chat);
-    $start = $count - $num_messages;
+    $start = count($chat) - $num_messages;
     $text = array();
     foreach ($chat as $line_num => $line) {
         if ($line_num >= $start) {
@@ -279,7 +244,22 @@ function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
     $log['text'] = $text;
     $log['success'] = "true";
 }
+//</editor-fold>
 
+function getUserChats(&$log, $user_id) {
+    $chat_ids = array();
+    $fileLoc = "userchats/" . $user_id . ".chats";
+    $file = file($fileLoc);
+    foreach ($file as $line_num => $line) {
+        $chat_ids[] = $line = str_replace("\n", "", $line);
+    }
+    $log['chatIDs'] = $chat_ids;
+    $log['success'] = "true";
+    $log['response'] = "retrieved chat ids";
+}
+//</editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc="Misc Utility Functions">
 function userHasAccessToChat($user_id, $chat_id) {
     $chatFileName = getUserChatsFileName($user_id);
     $chatFile = openf($chatFileName,'r');
@@ -292,6 +272,27 @@ function userHasAccessToChat($user_id, $chat_id) {
     return FALSE;
 }
 
+/**
+ * Fetches the chat data from the database based on chat ID
+ * @param string $chat_id ID of chat
+ * @return FALSE if no chat exists for that ID, otherwise array with chat data
+ */
+function getChatByID($chat_id) {
+    $query = "SELECT * FROM `chats` WHERE `id` = '$chat_id'";
+    $conn = connectToDatabase();
+    $results = $conn->query($query);
+    if ($results->num_rows == 0) {
+        return FALSE;
+    }
+    $chat = array();
+    $results_array = $results->fetch_array();
+    $chat['chatID'] = $results_array[0];
+    $chat['userOneID'] = $results_array[1];
+    $chat['userTwoID'] = $results_array[2];
+    $chat['fileName'] = $results_array[3];
+    return $chat;
+}
+
 function getUserChatsFileName($user_id) {
     return "userchats/".$user_id.".chats";
 }
@@ -299,6 +300,7 @@ function getUserChatsFileName($user_id) {
 function getChatFileName($chat_id) {
     return "chats/".$chat_id.".txt";
 }
+// </editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Old Code">
 function connectToChat(&$log) {

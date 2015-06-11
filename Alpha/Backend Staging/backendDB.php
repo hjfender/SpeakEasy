@@ -68,39 +68,6 @@ function authenticate($token, &$log) {
     }
 }
 
-/**
- * Fetches POST to send message
- * @param array $log Log for Javascript response
- * @param string $user_id ID of authenticated user
- */
-function prepSendMessage(&$log, $user_id) {
-    if (count(checkSet(array("message", "chatID"))) == 0) {
-        $log['success'] = "false";
-        $log['error'] = "missing inputs";
-        return;
-    }
-    $message = $_POST['message'];
-    $chat_id = $_POST['chatID'];
-    sendMessage($log, $user_id, $chat_id, $message);
-}
-
-function sendMessage(&$log, $user_id, $chat_id, $message) {
-    $chat = getChatByID($chat_id);
-    if ($chat === FALSE) {
-        $log['success'] = "false";
-        $log['error'] = "invalid chat id";
-        return;
-    }
-    if (!($chat['userOne'] == $user_id || $chat['userTwo'] == $user_id)) {
-        $log['success'] = "false";
-        $log['error'] = "no access";
-        return;
-    }
-    $fileName = $chat['fileName'];
-    fwrite(fopen("chats/" . $fileName . ".txt", 'a'), "<span>" . $chat_id . ": </span>" . (str_replace("\n", " ", $message)) . "\n");
-    $log['success'] = "true";
-    $log['response'] = "message sent";
-}
 
 // <editor-fold defaultstate="collapsed" desc="Executable Functions">
 // <editor-fold defaultstate="collapsed" desc="Create Chat From IDs">
@@ -160,6 +127,42 @@ function createChat(&$log, $user_id_one, $user_id_two) {
 function addChatToUserFile($user_id, $chat_id) {
     $fileLoc = "userchats/" . $user_id . ".chats";
     fwrite(fopen($fileLoc, 'a'), $chat_id . "\n");
+}
+//</editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc="Send Message">
+/**
+ * Fetches POST to send message
+ * @param array $log Log for Javascript response
+ * @param string $user_id ID of authenticated user
+ */
+function prepSendMessage(&$log, $user_id) {
+    if (count(checkSet(array("message", "chatID"))) == 0) {
+        $log['success'] = "false";
+        $log['error'] = "missing inputs";
+        return;
+    }
+    $message = $_POST['message'];
+    $chat_id = $_POST['chatID'];
+    sendMessage($log, $user_id, $chat_id, $message);
+}
+
+function sendMessage(&$log, $user_id, $chat_id, $message) {
+    $chat = getChatByID($chat_id);
+    if ($chat === FALSE) {
+        $log['success'] = "false";
+        $log['error'] = "invalid chat id";
+        return;
+    }
+    if (!($chat['userOne'] == $user_id || $chat['userTwo'] == $user_id)) {
+        $log['success'] = "false";
+        $log['error'] = "no access";
+        return;
+    }
+    $fileName = $chat['fileName'];
+    fwrite(fopen("chats/" . $fileName . ".txt", 'a'), "<span>" . $chat_id . ": </span>" . (str_replace("\n", " ", $message)) . "\n");
+    $log['success'] = "true";
+    $log['response'] = "message sent";
 }
 //</editor-fold>
 

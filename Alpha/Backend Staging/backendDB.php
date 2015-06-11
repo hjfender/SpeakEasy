@@ -2,6 +2,8 @@
 
 include "utils.php";
 
+main();
+
 // <editor-fold defaultstate="collapsed" desc="Main Code">
 /**
  * Creates Log array to return to with request. Authenticates user. Creates
@@ -32,7 +34,7 @@ function main() {
 }
 
 /**
- * Authenticates user. Retireves ID of user from token.
+ * Authenticates user. Retireves ID of user from token
  * @param string $token Token provided with request.
  * @param array $log Log file to return to sender
  * @return boolean Returns FALSE if unable to authenticate, otherwise returns 
@@ -143,6 +145,7 @@ function addChatToUserFile($user_id, $chat_id) {
 
 //</editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Send Message">
+
 /**
  * Fetches POST to send message
  * @param array $log Log for Javascript response

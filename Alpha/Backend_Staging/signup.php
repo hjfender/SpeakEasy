@@ -43,7 +43,7 @@ while(!$foundUnique) {
 
 $query = "INSERT INTO `profiles` (`id`, `first_name`, `last_name`, `email`, `password`) VALUES ('$uuid','$firstName','$lastName','$email','$password')";
 if($conn -> query($query)) {
-    fwrite(fopen("userchats/".$uuid."chats", 'a'),"");
+    fwrite(fopen(getUserChatsFilePath($uuid), 'a'),"");
     echo "<br/>Profile creation successful";
 } else {
     echo "<br/>Unknown creation error";

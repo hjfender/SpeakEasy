@@ -7,26 +7,27 @@ function passToken(token1) {
     token = token1;
 }
 function createChat() {
-    console.log("creating chat");
     var emailOne = document.getElementById("emailOneCreate").value;
     var emailTwo = document.getElementById("emailTwoCreate").value;
-    console.log(token);
-    console.log(emailOne);
-    console.log(emailTwo);
+    console.log("creating chat for " + emailOne + " and " + emailTwo);
     $.ajax({
         type: "POST",
-        url: "backendDB.php",
+        url: "sudo.php",
         data: {
             'token': token,
-            'function': "createChat",
+            'function': "create chat by email",
             'emailOne': emailOne,
             'emailTwo': emailTwo
         },
         datatype: "json",
-        success: function (data) {
+        success: function (json) {
+            console.log(json);
+            var data = jQuery.parseJSON(json);
             console.log(data);
             if (data.success === "true") {
                 console.log("chat created");
+            } else {
+                console.log("unable to create chat");
             }
         }
     });

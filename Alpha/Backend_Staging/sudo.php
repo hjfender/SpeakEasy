@@ -19,7 +19,7 @@ function main() {
 
 function executeFunction(&$log, $function) {
     if ($function == "create chat by email") {
-        createChatByEmails($log);
+        prepCreateChatByEmails($log);
     }
 }
 
@@ -38,7 +38,7 @@ function createChatByEmails(&$log, $email_one, $email_two) {
     $queryOne = "SELECT `id` FROM `profiles` WHERE `email` LIKE '$email_one'";
     $queryTwo = "SELECT `id` FROM `profiles` WHERE `email` LIKE '$email_two'";
 
-    $conn = connectToDatabase("speakeasy");
+    $conn = connectToDatabase();
 
     $resultsOne = ($conn->query($queryOne));
     $resultsTwo = ($conn->query($queryTwo));
@@ -48,8 +48,14 @@ function createChatByEmails(&$log, $email_one, $email_two) {
 
         $id_one = $resultsOne->fetch_array()[0];
         $id_two = $resultsTwo->fetch_array()[0];
-
-        $conn = connectToDatabase();
+        
+        $query = "SELECT `id` FROM `chats` WHERE (`user_one` = '$id_one' AND `user_two` = '$id_two') OR (`user_one` = '$id_two' AND `user_two` = '$id_one') LIMIT 1";
+        if ($conn->query($query) -> num_rows != 0) {
+            $log['success'] = "false";
+            $log['error'] = "chat already exists";
+            return;
+        }
+        
         $query = "INSERT INTO chats (id,user_one,user_two) VALUES ('$chat_id','$id_one','$id_two')";
         if ($conn->query($query) === TRUE) {
             $log['success'] = "true";
@@ -57,13 +63,13 @@ function createChatByEmails(&$log, $email_one, $email_two) {
             addChatToUserFile($id_one, $chat_id);
             addChatToUserFile($id_two, $chat_id);
 
-            fwrite(fopen(getChatFilePath($chat_id)), $email_one . " " . $email_two);
+            fwrite(fopen(getChatFilePath($chat_id),'a'), $email_one . " " . $email_two);
         } else {
             $log['success'] = "false";
             $log['error'] = "unable to create chat";
         }
     } else {
         $log['success'] = "false";
-        $log['error'] = "profiles not found";
+        $log['error'] = "profile(s) not found";
     }
 }

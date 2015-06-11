@@ -72,3 +72,23 @@ function getUserChatsFilePath($user_id) {
 function getChatFilePath($chat_id) {
     return "chats/" . $chat_id . ".chat";
 }
+
+function addChatToUserFile($user_id, $chat_id) {
+    $fileLoc = getUserChatsFilePath($user_id);
+    fwrite(fopen($fileLoc, 'a'), $chat_id . "\n");
+}
+
+/**
+ * Checks to make sure array variables are set
+ * @param array $toCheck The Array to check set
+ * @return array Of unset variables
+ */
+function checkSet($toCheck) {
+    $unchecked = array();
+    foreach ($toCheck as $value) {
+        if (!isset($_POST, $value)) {
+            array_push($unchecked, $value);
+        }
+    }
+    return $unchecked;
+}

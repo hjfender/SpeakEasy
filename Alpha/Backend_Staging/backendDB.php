@@ -75,6 +75,9 @@ function executeFunction($command, $user_id, &$log) {
         getUserChats($log, $user_id);
     } else if ($command == 'new messages') {
         prepRetrieveNewMessages($log, $user_id);
+    } else {
+        $log['success'] = "false";
+        $log['error'] = "invalid function";
     }
 }
 //</editor-fold>
@@ -123,8 +126,8 @@ function createChat(&$log, $user_id_one, $user_id_two) {
         $log['success'] = "true";
         $log['response'] = "chat created";
         fwrite(fopen("chats/" . $uuid . ".txt", 'a'), $emailOne . " " . $emailTwo);
-        $addChatToUserFile($user_id_one, $uuid);
-        $addChatToUserFile($user_id_two, $uuid);
+        addChatToUserFile($user_id_one, $uuid);
+        addChatToUserFile($user_id_two, $uuid);
         return TRUE;
     } else {
         $log['success'] = "false";
@@ -134,7 +137,7 @@ function createChat(&$log, $user_id_one, $user_id_two) {
 }
 
 function addChatToUserFile($user_id, $chat_id) {
-    $fileLoc = "userchats/" . $user_id . ".chats";
+    $fileLoc = getUserChatsFilePath($user_id);
     fwrite(fopen($fileLoc, 'a'), $chat_id . "\n");
 }
 
@@ -383,21 +386,6 @@ function getFileName($idOne, $idTwo) {
     $results = $conn->query($query)->fetch_assoc();
     $results["file_name"][0];
     return $results;
-}
-
-/**
- * Checks to make sure array variables are set
- * @param array $toCheck The Array to check set
- * @return array Of unset variables
- */
-function checkSet($toCheck) {
-    $unchecked = array();
-    foreach ($toCheck as $value) {
-        if (!isset($_POST, $value)) {
-            array_push($unchecked, $value);
-        }
-    }
-    return $unchecked;
 }
 
 function missingInputs(&$log) {

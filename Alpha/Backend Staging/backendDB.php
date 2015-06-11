@@ -67,18 +67,13 @@ function authenticate($token, &$log) {
  * @param type $log Array for response to javascript
  */
 function executeFunction($command, $user_id, &$log) {
-    if ($command == 'send') {
-        sendMessage($log, $user_id);
-    } else if ($command == 'createChat') {
-        createChatByEmails($log);
-    } else if ($command == 'retrieveLastN') {
+    if ($command == 'send message') {
+        prepSendMessage($log, $user_id);
+    } else if ($command == 'last n messages') {
         prepRetrieveLastNMessages($log, $user_id);
-    } else if ($command == 'connect') {
-        error_log("Connecting to chat");
-        connectToChat($log);
-    } else if ($command == 'getChatIDs') {
+    } else if ($command == 'retrive chat ids') {
         getUserChats($log, $user_id);
-    } else if ($command == 'getNewMessages') {
+    } else if ($command == 'new messages') {
         prepRetrieveNewMessages($log, $user_id);
     }
 }
@@ -250,7 +245,7 @@ function prepRetrieveLastNMessages(&$log, $user_id) {
 }
 
 function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
-    $fileName = getChatFileName($chat_id);
+    $fileName = getChatFilePath($chat_id);
     $chat = open($fileName);
     $start = count($chat) - $num_messages;
     $text = array();
@@ -281,7 +276,7 @@ function getUserChats(&$log, $user_id) {
 
 // <editor-fold defaultstate="collapsed" desc="Misc Utility Functions">
 function userHasAccessToChat($user_id, $chat_id) {
-    $chatFileName = getUserChatsFileName($user_id);
+    $chatFileName = getUserChatsFilePath($user_id);
     $chatFile = openf($chatFileName, 'r');
     while (feof($chatFile)) {
         $line = str_replace("\n", "", fgets($chatFile));
@@ -313,14 +308,6 @@ function getChatByID($chat_id) {
     return $chat;
 }
 
-function getUserChatsFileName($user_id) {
-    return "userchats/" . $user_id . ".chats";
-}
-
-function getChatFileName($chat_id) {
-    return "chats/" . $chat_id . ".txt";
-}
-
 // </editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Old Code">
@@ -347,30 +334,7 @@ function connectToChat(&$log) {
     }
 }
 
-function createChatByEmails(&$log) {
-    if (count(checkSet(array("emailOne", "emailTwo"))) != 0) {
-        missingInputs($log);
-        return;
-    }
-    $emailOne = $_POST['emailOne'];
-    $emailTwo = $_POST['emailTwo'];
-    $queryOne = "SELECT `id` FROM `profiles` WHERE `email` LIKE '$emailOne'";
-    $queryTwo = "SELECT `id` FROM `profiles` WHERE `email` LIKE '$emailTwo'";
-    $conn = connectToDatabase("speakeasy");
-    $resultsOne = ($conn->query($queryOne));
-    $resultsTwo = ($conn->query($queryTwo));
-    if ($resultsOne->num_rows > 0 && $resultsTwo->num_rows > 0) {
-        $log['success'] = "true";
-        $fileName = generateUUID();
-        $idOne = $resultsOne->fetch_array()[0];
-        $idTwo = $resultsTwo->fetch_array()[0];
-        addChatToDatabase($idOne, $idTwo, $fileName);
-        fwrite(fopen("chats/" . $fileName . ".txt", 'a'), $emailOne . " " . $emailTwo);
-    } else {
-        $log['success'] = "false";
-        $log['error'] = "profiles not found";
-    }
-}
+
 
 function validUserID($id) {
     $conn = connectToDatabase("speakeasy");
@@ -399,30 +363,6 @@ function retrieveFileNameByUserIDs($idOne, $idTwo) {
 function retrieveFileNamesByChatID($chatID) {
     $conn = connectToDatabase("speakeasy");
     $query = "SELECT `file_name` FROM `chats` WHERE `id` LIKE '$chatID'";
-}
-
-function addChatToDatabase($idOne, $idTwo, $fileName) {
-    $serverfirst = "localhost";
-    $userfirst = "root";
-    $password = "";
-    $dbfirst = "speakeasy";
-
-    // Create connection
-    $conn = new mysqli($serverfirst, $userfirst, $password, $dbfirst);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    $id = $fileName;
-    $sql = "INSERT INTO chats (id,user_one,user_two,file_name) VALUES ('$id','$idOne','$idTwo', '$fileName')";
-    if ($conn->query($sql) === TRUE) {
-        error_log("Added chat");
-        addChatToUserFile($idOne, $id);
-        addChatToUserFile($idTwo, $id);
-    } else {
-        error_log("Chat could not be added");
-    }
 }
 
 function getFileName($idOne, $idTwo) {

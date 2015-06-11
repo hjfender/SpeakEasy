@@ -2,28 +2,61 @@
 
 include "utils.php";
 
-$log = array();
-if (!isset($_POST['token'])) {
-    $log['success'] = "false";
-    $log['error'] = "no authentication token given";
-    error_log("Unable to Authenticate2");
-} else if (!isset($_POST['function'])) {
-    $log['success'] = "false";
-    $log['error'] = "no function given";
-} else {
-    $token = $_POST['token'];
-    $user_id = authenticate($token, $log);
-    if ($user_id === FALSE) {
+// <editor-fold defaultstate="collapsed" desc="Main Code">
+/**
+ * Creates Log array to return to with request. Authenticates user. Creates
+ * Response from Log array
+ */
+function main() {
+    $log = array();
+    if (!isset($_POST['token'])) {
         $log['success'] = "false";
-        $log['error'] = "invalid token";
+        $log['error'] = "no authentication token given";
+        error_log("Unable to Authenticate2");
+    } else if (!isset($_POST['function'])) {
+        $log['success'] = "false";
+        $log['error'] = "no function given";
     } else {
-        $function = $_POST['function'];
-        executeFunction($function, $user_id, $log);
+        $token = $_POST['token'];
+        $user_id = authenticate($token, $log);
+        if ($user_id === FALSE) {
+            $log['success'] = "false";
+            $log['error'] = "invalid token";
+        } else {
+            $function = $_POST['function'];
+            executeFunction($function, $user_id, $log);
+        }
+        echo json_encode($log);
+        exit;
     }
-    echo json_encode($log);
-    exit;
 }
 
+/**
+ * Authenticates user. Retireves ID of user from token.
+ * @param string $token Token provided with request.
+ * @param array $log Log file to return to sender
+ * @return boolean Returns FALSE if unable to authenticate, otherwise returns 
+ * user ID of associated with token
+ */
+function authenticate($token, &$log) {
+    $ipAddress = getClientIP();
+    $query = "SELECT `user_id`,`updated` FROM `sessions` WHERE `token` = '$token' AND `ip_address` = '$ipAddress' LIMIT 1";
+    $conn = connectToDatabase();
+    $results = $conn->query($query);
+    if ($results->num_rows === 0) {
+        error_log("Unable to Authenticate2" . $token);
+        return FALSE;
+    } else {
+        $array = $results->fetch_array();
+        $updated = new DateTime($array[1]);
+        $updated->add(new DateInterval("PT15M"));        
+        $now = new DateTime();
+        if ($now > $updated) {
+            //Handle timeout
+        }
+        return $array[0];
+    }
+}
 
 /**
  * Executes the command requested by the frontend
@@ -37,7 +70,7 @@ function executeFunction($command, $user_id, &$log) {
     } else if ($command == 'createChat') {
         createChatByEmails($log);
     } else if ($command == 'retrieveLastN') {
-        prepRetrieveLastNMessages($log,$user_id);
+        prepRetrieveLastNMessages($log, $user_id);
     } else if ($command == 'connect') {
         error_log("Connecting to chat");
         connectToChat($log);
@@ -47,27 +80,7 @@ function executeFunction($command, $user_id, &$log) {
         prepRetrieveNewMessages($log, $user_id);
     }
 }
-
-function authenticate($token, &$log) {
-    $ipAddress = getClientIP();
-    $query = "SELECT `user_id`,`updated` FROM `sessions` WHERE `token` = '$token' AND `ip_address` = '$ipAddress' LIMIT 1";
-    $conn = connectToDatabase();
-    $results = $conn->query($query);
-    if ($results->num_rows === 0) {
-        error_log("Unable to Authenticate2" . $token);
-        return FALSE;
-    } else {
-        $array = $results->fetch_array();
-        $updated = new DateTime($array[1]);
-        $now = new DateTime();
-        $updated->add(new DateInterval("PT15M"));
-        if ($now > $updated) {
-            //Handle timeout
-        }
-        return $array[0];
-    }
-}
-
+//</editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Executable Functions">
 // <editor-fold defaultstate="collapsed" desc="Create Chat From IDs">
@@ -123,13 +136,12 @@ function createChat(&$log, $user_id_one, $user_id_two) {
     }
 }
 
-
 function addChatToUserFile($user_id, $chat_id) {
     $fileLoc = "userchats/" . $user_id . ".chats";
     fwrite(fopen($fileLoc, 'a'), $chat_id . "\n");
 }
-//</editor-fold>
 
+//</editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Send Message">
 /**
  * Fetches POST to send message
@@ -164,8 +176,8 @@ function sendMessage(&$log, $user_id, $chat_id, $message) {
     $log['success'] = "true";
     $log['response'] = "message sent";
 }
-//</editor-fold>
 
+//</editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Retrieve New Messages">
 function prepRetrieveNewMessages(&$log, $user_id) {
     if (count(checkSet(array("chatID", "state"))) != 0) {
@@ -214,23 +226,23 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
     $log['text'] = "false";
     $log['success'] = "true";
 }
-// </editor-fold>
 
+// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Get Last N Messages">
 function prepRetrieveLastNMessages(&$log, $user_id) {
     if (count(checkSet(array("chatID", "numMessages"))) != 0) {
         missingInputs($log);
         return;
     }
-    
+
     $chat_id = $_POST['chatID'];
     $num_messages = $_POST['numMessages'];
-    
-    if(!userHasAccessToChat($user_id, $chat_id)) {
+
+    if (!userHasAccessToChat($user_id, $chat_id)) {
         $log['success'] = "false";
         $log['error'] = "no access";
         return;
-    } 
+    }
     retrieveLastNMessages($log, $chat_id, $num_messages);
 }
 
@@ -247,6 +259,7 @@ function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
     $log['text'] = $text;
     $log['success'] = "true";
 }
+
 //</editor-fold>
 
 function getUserChats(&$log, $user_id) {
@@ -260,15 +273,16 @@ function getUserChats(&$log, $user_id) {
     $log['success'] = "true";
     $log['response'] = "retrieved chat ids";
 }
+
 //</editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Misc Utility Functions">
 function userHasAccessToChat($user_id, $chat_id) {
     $chatFileName = getUserChatsFileName($user_id);
-    $chatFile = openf($chatFileName,'r');
-    while(feof($chatFile)) {
+    $chatFile = openf($chatFileName, 'r');
+    while (feof($chatFile)) {
         $line = str_replace("\n", "", fgets($chatFile));
-        if($line === $chat_id){
+        if ($line === $chat_id) {
             return TRUE;
         }
     }
@@ -297,12 +311,13 @@ function getChatByID($chat_id) {
 }
 
 function getUserChatsFileName($user_id) {
-    return "userchats/".$user_id.".chats";
+    return "userchats/" . $user_id . ".chats";
 }
 
 function getChatFileName($chat_id) {
-    return "chats/".$chat_id.".txt";
+    return "chats/" . $chat_id . ".txt";
 }
+
 // </editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Old Code">
@@ -450,6 +465,6 @@ function missingInputs(&$log) {
 function getFileLocation($fileName) {
     return "chats/" . $fileName . ".txt";
 }
-// </editor-fold>
 
+// </editor-fold>
 ?>

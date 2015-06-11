@@ -64,3 +64,11 @@ function getClientIP() {
         $ipaddress = 'UNKNOWN';
     return $ipaddress;
 }
+
+function getUserChatsFilePath($user_id) {
+    return "userchats/" . $user_id . ".chats";
+}
+
+function getChatFilePath($chat_id) {
+    return "chats/" . $chat_id . ".chat";
+}

@@ -1,6 +1,7 @@
 var instance;
 var token;
-var state = 0;
+var currentState = 0;
+var selectedChatID;
 function passToken(token1) {
     token = token1;
 }
@@ -98,6 +99,62 @@ function sendMessageSuccess(json) {
 }
 //</editor-fold>
 
+// <editor-fold defaultstate="collapsed" desc="Update Chat">
+/**
+ * Gathers data and executes pre-request functions for updateChat
+ * @returns 
+ */
+function prepUpdateChat() {
+    var chatID = "124";
+    console.log("Retrieving messages for chat ID " + selectedChatID);
+    updateChat(selectedChatID, currentState);;
+}
+
+/**
+ * Gets the new messages for the specified chat ID. Provided state indicates
+ * how many messages are already loaded.
+ * @param {String} chatID ID of chat requesting messages for
+ * @param {Number} state How many lines have chat the client currently has
+ * @returns 
+ */
+function updateChat(chatID, state) {
+    $.ajax({
+        type: "POST",
+        url: "backendDB.php",
+        data: {
+            'function': 'retrieve',
+            'token': token,
+            'state': state,
+            'chatID': chatID
+        },
+        dataType: "json",
+        success: updateChatSuccess
+    });
+}
+
+/**
+ * Changes HTML and executes post response functions for updateChat
+ * @param {Object or String} json JSON response from server
+ * @returns 
+ */
+function updateChatSuccess(json) {
+    console.log(json);
+    var data = convertToObject(json);
+    
+    if (data.success === "true") {
+        console.log("Got messages:");
+        if (data.text) {
+            var j = 0; 
+            for (var i = 0; i < data.text.length; i++) {
+                $('#chat-area').append($("<p>" + data.text[i] + "</p>"));
+                j = j + 1;
+            }
+            currentState = j;
+        }
+    }
+    document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
+    currentState = data.state;
+}
 //</editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Sudo Functions">
@@ -156,6 +213,8 @@ function createChatSucccess(json) {
 // </editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Old Code">
+
+// <editor-fold defaultstate="collapsed" desc="Connect to Chat">
 function connectToChat() {
     console.log("Connecting to chat");
     var emailOne = document.getElementById("emailOne").value;
@@ -188,48 +247,9 @@ function connectToChat() {
         }
     });
 }
+//</editor-fold>
 
 
-function updateChat() {
-    console.log("Retrieving messages for ids " + idOne + ", " + idTwo);
-    if (!instance) {
-        instance = true;
-        $.ajax({
-            type: "POST",
-            url: "backendDB.php",
-            data: {
-                'token': token,
-                'state': state,
-                'function': 'retrieve',
-                'idOne': idOne,
-                'idTwo': idTwo
-            },
-            dataType: "json",
-            success: function (json) {
-                console.log("Recieved a response");
-                console.log(json);
-                var data = convertToObject(json);
-                var name = document.getElementById("name").value;
-                if (data.success) {
-                    console.log("Got messages:");
-                    if (data.text) {
-                        var j = 0;
-                        for (var i = 0; i < data.text.length; i++) {
-                            console.log(data.text[i].substring(0, 6 + name.length));
-                            $('#chat-area').append($("<p>" + data.text[i] + "</p>"));
-                            j = j + 1;
-                        }
-                        state = j;
-                    }
-                }
-                document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
-                instance = false;
-                state = data.state;
-                updateChat();
-            },
-        });
-    }
-}
 
 function getMessages(chatID) {
     console.log("getting messages");

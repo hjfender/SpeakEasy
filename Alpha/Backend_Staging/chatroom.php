@@ -31,7 +31,7 @@
         <b><a href="createProfile.html">Create a profile </a></b>
         <div><button onclick="prepUpdateChat()">Update Chat</button></div>
         <div id="chat-area"></div>
-        <form id="message-form" action="javascript:sendMessage()">
+        <form id="message-form" action="javascript:prepSendMessage()">
             <p>Enter your message:</p>
             <input type="text" id="message" maxlength="128">
             <input type="submit">

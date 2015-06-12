@@ -80,6 +80,7 @@ function executeFunction($command, $user_id, &$log) {
 }
 
 //</editor-fold>
+
 // <editor-fold defaultstate="collapsed" desc="Executable Functions">
 // <editor-fold defaultstate="collapsed" desc="Create Chat From IDs">
 /**
@@ -143,7 +144,7 @@ function createChat(&$log, $user_id_one, $user_id_two) {
  * @param string $user_id ID of authenticated user
  */
 function prepSendMessage(&$log, $user_id) {
-    if (count(checkSet(array("message", "chatID"))) == 0) {
+    if (count(checkSet(array("message", "chatID"))) != 0) {
         $log['success'] = "false";
         $log['error'] = "missing inputs";
         return;
@@ -160,13 +161,13 @@ function sendMessage(&$log, $user_id, $chat_id, $message) {
         $log['error'] = "invalid chat id";
         return;
     }
-    if (!($chat['userOne'] == $user_id || $chat['userTwo'] == $user_id)) {
+    if (!($chat['userOneID'] == $user_id || $chat['userTwoID'] == $user_id)) {
         $log['success'] = "false";
         $log['error'] = "no access";
         return;
     }
-    $fileName = $chat['fileName'];
-    fwrite(fopen("chats/" . $fileName . ".txt", 'a'), "<span>" . $chat_id . ": </span>" . (str_replace("\n", " ", $message)) . "\n");
+    $chatFilePath = getChatFilePath($chat_id);
+    fwrite(fopen($chatFilePath, 'a'), "\n<span>" . $user_id . ": </span>" . (str_replace("\n", " ", $message)) . "\n");
     $log['success'] = "true";
     $log['response'] = "message sent";
 }
@@ -270,6 +271,7 @@ function getUserChats(&$log, $user_id) {
 }
 
 //</editor-fold>
+
 // <editor-fold defaultstate="collapsed" desc="Misc Utility Functions">
 function userHasAccessToChat($user_id, $chat_id) {
     $chatFileName = getUserChatsFilePath($user_id);
@@ -304,6 +306,7 @@ function getChatByID($chat_id) {
 }
 
 // </editor-fold>
+
 // <editor-fold defaultstate="collapsed" desc="Old Code">
 function connectToChat(&$log) {
     if (count(checkSet(array("emailOne", "emailTwo"))) != 0) {

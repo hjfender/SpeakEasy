@@ -62,7 +62,7 @@ function getChatIDsSuccess(json) {
  */
 function prepSendMessage() {
     var message = document.getElementById("message").value;
-    var chatID = document.getElementById("chatID").value;
+    var chatID = selectedChatID;
     sendMessage(chatID, message);
 }
 
@@ -76,7 +76,7 @@ function sendMessage(chatID, message) {
     $.ajax({
         type: "POST",
         url: "backendDB.php",
-        data: {'function': 'send',
+        data: {'function': 'send message',
             'token': token,
             'chatID': chatID,
             'message': message
@@ -142,7 +142,6 @@ function updateChatSuccess(json) {
     var data = convertToObject(json);
     
     if (data.success === "true") {
-        console.log("Got messages:");
         if (data.text) {
             var j = 0; 
             for (var i = 0; i < data.text.length; i++) {

@@ -6,7 +6,7 @@ function passToken(token1) {
 }
 
 // <editor-fold defaultstate="collapsed" desc="Normal Functions">
- 
+
 // <editor-fold defaultstate="collapsed" desc="Get Chat IDs">
 /**
  * Gather data and execute pre-request functions
@@ -54,10 +54,54 @@ function getChatIDsSuccess(json) {
 }
 //</editor-fold>
 
+// <editor-fold defaultstate="collapsed" desc="Send Message">
+/**
+ * Gathers data and executes pre-request functions for sendMessage
+ * @returns
+ */
+function prepSendMessage() {
+    var message = document.getElementById("message").value;
+    var chatID = document.getElementById("chatID").value;
+    sendMessage(chatID, message);
+}
+
+/**
+ * Sends a messages to the specified chatID
+ * @param {String} chatID Chat to send message to
+ * @param {String} message Message to send to chat
+ * @returns 
+ */
+function sendMessage(chatID, message) {
+    $.ajax({
+        type: "POST",
+        url: "backendDB.php",
+        data: {'function': 'send',
+            'token': token,
+            'chatID': chatID,
+            'message': message
+        },
+        dataType: "json",
+        success: sendMessageSuccess
+    });
+}
+
+/**
+ * Changes HTML and other post-request functions for sendMessage
+ * @param {Object or String} json JSON response from server
+ * @returns 
+ */
+function sendMessageSuccess(json) {
+    console.log(json);
+    var data = convertToObject(json);
+    document.getElementById("message").value = "";
+    updateChat();
+}
+//</editor-fold>
+
 //</editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Sudo Functions">
- 
+
 // <editor-fold defaultstate="collapsed" desc="Create Chat">
 /**
  * Gathers data for and handles pre-request functions for createChat()
@@ -145,28 +189,6 @@ function connectToChat() {
     });
 }
 
-function sendMessage() {
-    var message = document.getElementById("message").value;
-    var name = document.getElementById("name").value;
-    $.ajax({
-        type: "POST",
-        url: "backendDB.php",
-        data: {'function': 'send',
-            'token': token,
-            'idOne': idOne,
-            'idTwo': idTwo,
-            'message': message,
-            'name': name,
-            'file': 'stuff'},
-        dataType: "json",
-        success: function (json) {
-            console.log(json);
-            var data = convertToObject(json);
-            document.getElementById("message").value = "";
-            updateChat();
-        }
-    });
-}
 
 function updateChat() {
     console.log("Retrieving messages for ids " + idOne + ", " + idTwo);

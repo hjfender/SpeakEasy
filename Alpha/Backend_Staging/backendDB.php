@@ -2,8 +2,6 @@
 
 include "utils.php";
 
-main();
-
 // <editor-fold defaultstate="collapsed" desc="Main Code">
 /**
  * Creates Log array to return to with request. Authenticates user. Creates
@@ -83,6 +81,7 @@ function executeFunction($command, $user_id, &$log) {
 //</editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Executable Functions">
+
 // <editor-fold defaultstate="collapsed" desc="Create Chat From IDs">
 /**
  * Gets POST data from Ajax request to create chat for given users
@@ -136,10 +135,6 @@ function createChat(&$log, $user_id_one, $user_id_two) {
     }
 }
 
-function addChatToUserFile($user_id, $chat_id) {
-    $fileLoc = getUserChatsFilePath($user_id);
-    fwrite(fopen($fileLoc, 'a'), $chat_id . "\n");
-}
 
 //</editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Send Message">
@@ -265,7 +260,7 @@ function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
 
 function getUserChats(&$log, $user_id) {
     $chat_ids = array();
-    $fileLoc = "userchats/" . $user_id . ".chats";
+    $fileLoc = getUserChatsFilePath($user_id);
     $file = file($fileLoc);
     foreach ($file as $line_num => $line) {
         $chat_ids[] = $line = str_replace("\n", "", $line);
@@ -398,4 +393,6 @@ function getFileLocation($fileName) {
 }
 
 // </editor-fold>
+
+main();
 ?>

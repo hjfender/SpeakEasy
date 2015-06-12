@@ -12,9 +12,9 @@ function main() {
     } else {
         $function = $_POST['function'];
         executeFunction($log, $function);
-        echo json_encode($log);
-        exit;
     }
+    echo json_encode($log);
+    exit;
 }
 
 function executeFunction(&$log, $function) {
@@ -48,14 +48,14 @@ function createChatByEmails(&$log, $email_one, $email_two) {
 
         $id_one = $resultsOne->fetch_array()[0];
         $id_two = $resultsTwo->fetch_array()[0];
-        
+
         $query = "SELECT `id` FROM `chats` WHERE (`user_one` = '$id_one' AND `user_two` = '$id_two') OR (`user_one` = '$id_two' AND `user_two` = '$id_one') LIMIT 1";
-        if ($conn->query($query) -> num_rows != 0) {
+        if ($conn->query($query)->num_rows != 0) {
             $log['success'] = "false";
             $log['error'] = "chat already exists";
             return;
         }
-        
+
         $query = "INSERT INTO chats (id,user_one,user_two) VALUES ('$chat_id','$id_one','$id_two')";
         if ($conn->query($query) === TRUE) {
             $log['success'] = "true";
@@ -63,7 +63,7 @@ function createChatByEmails(&$log, $email_one, $email_two) {
             addChatToUserFile($id_one, $chat_id);
             addChatToUserFile($id_two, $chat_id);
 
-            fwrite(fopen(getChatFilePath($chat_id),'a'), $email_one . " " . $email_two);
+            fwrite(fopen(getChatFilePath($chat_id), 'a'), $email_one . " " . $email_two);
         } else {
             $log['success'] = "false";
             $log['error'] = "unable to create chat";

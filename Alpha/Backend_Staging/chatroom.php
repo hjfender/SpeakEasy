@@ -28,20 +28,6 @@
                     <div/>
             </form>
             <b><a href="createProfile.html">Create a profile </a></b>
-            <form action="javascript:connectToChat()">
-                <div>
-                    <div>
-                        Email One: <input type="text" id="emailOne" /> Name: <input type="text" id="name" />
-                    </div>
-                    <div>
-                        Email Two: <input type = "text" id="emailTwo" />
-                    </div>
-                    <div>
-                        <input type="submit" />
-                    </div>
-                    <div id="connectionError"></div>
-                    <div/>
-            </form>
             <div id="chat-area"></div>
             <form id="message-form" action="javascript:sendMessage()">
                 <p>Enter your message:</p>

@@ -28,6 +28,7 @@
                     <div/>
             </form>
             <b><a href="createProfile.html">Create a profile </a></b>
+            <div><button onclick="prepUpdateChat()">Update Chat</button></div>
             <div id="chat-area"></div>
             <form id="message-form" action="javascript:sendMessage()">
                 <p>Enter your message:</p>

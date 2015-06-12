@@ -48,7 +48,7 @@ function getChatIDsSuccess(json) {
         console.log("Got Chat IDs");
         for (var i = 0; i < data.chatIDs.length; i++) {
             var item = data.chatIDs[i].replace("\n", "");
-            var command = "getMessages(\'" + item + "\')";
+            var command = "setSelectedChat(\'" + item + "\')";
             $('#chat-ids-area').append($("<div>" + item + " <button onclick=\"" + command + "\">Open Chat</button></div>"));
         }
     }
@@ -155,6 +155,8 @@ function updateChatSuccess(json) {
     document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
     currentState = data.state;
 }
+//</editor-fold>
+
 //</editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Sudo Functions">
@@ -285,5 +287,9 @@ function convertToObject(json) {
     } else {
         return json;
     }
+}
+
+function setSelectedChat(newChat) {
+    selectedChat = newChat;
 }
 //</editor-fold>

@@ -1,12 +1,26 @@
 var instance;
 var token;
 var state = 0;
-
 function passToken(token1) {
     token = token1;
 }
 
 // <editor-fold defaultstate="collapsed" desc="Normal Functions">
+ 
+// <editor-fold defaultstate="collapsed" desc="Get Chat IDs">
+/**
+ * Gather data and execute pre-request functions
+ * @returns 
+ */
+function prepGetChatIDs() {
+    console.log("getting chat IDs");
+    getChatIDs();
+}
+
+/**
+ * Gets the chat IDs for the user assosiated with the set token
+ * @returns 
+ */
 function getChatIDs() {
     console.log("Getting Chat IDs");
     $.ajax({
@@ -17,27 +31,52 @@ function getChatIDs() {
             'function': 'retrive chat ids'
         },
         dataType: "json",
-        success: function (json) {
-            console.log(json);
-            var data = convertToObject(json);
-            if (data.success === "true") {
-                console.log("Got Chat IDs");
-                for (var i = 0; i < data.chatIDs.length; i++) {
-                    var item = data.chatIDs[i].replace("\n", "");
-                    var command = "getMessages(\'" + item + "\')";
-                    $('#chat-ids-area').append($("<div>" + item + " <button onclick=\"" + command + "\">Open Chat</button></div>"));
-                }
-            }
-        }
+        success: getChatIDsSuccess
     });
+}
+
+/**
+ * Handles post response HTML changes and other functions
+ * @param {String or Object} json JSON response from the server
+ * @returns 
+ */
+function getChatIDsSuccess(json) {
+    console.log(json);
+    var data = convertToObject(json);
+    if (data.success === "true") {
+        console.log("Got Chat IDs");
+        for (var i = 0; i < data.chatIDs.length; i++) {
+            var item = data.chatIDs[i].replace("\n", "");
+            var command = "getMessages(\'" + item + "\')";
+            $('#chat-ids-area').append($("<div>" + item + " <button onclick=\"" + command + "\">Open Chat</button></div>"));
+        }
+    }
 }
 //</editor-fold>
 
+//</editor-fold>
+
 // <editor-fold defaultstate="collapsed" desc="Sudo Functions">
-function createChat() {
+ 
+// <editor-fold defaultstate="collapsed" desc="Create Chat">
+/**
+ * Gathers data for and handles pre-request functions for createChat()
+ * @returns 
+ */
+function prepCreateChat() {
     var emailOne = document.getElementById("emailOneCreate").value;
     var emailTwo = document.getElementById("emailTwoCreate").value;
     console.log("creating chat for " + emailOne + " and " + emailTwo);
+    createChat(emailOne, emailTwo);
+}
+/**
+ * Creates a chat in the database between the users of the two given emails
+ * Calls createChatSuccess if request successful 
+ * @param {String} emailOne Email of one user
+ * @param {String} emailTwo Email of other user
+ * @returns 
+ */
+function createChat(emailOne, emailTwo) {
     $.ajax({
         type: "POST",
         url: "sudo.php",
@@ -48,18 +87,28 @@ function createChat() {
             'emailTwo': emailTwo
         },
         datatype: "json",
-        success: function (json) {
-            console.log(json);
-            var data = convertToObject(json);
-            console.log(data);
-            if (data.success === "true") {
-                console.log("chat created");
-            } else {
-                console.log("unable to create chat");
-            }
-        }
+        success: createChatSucccess
     });
 }
+
+/**
+ * Handles HTML changes and post-response for createChat
+ * @param {String or Object} json JSON object or string from request
+ * @returns 
+ */
+function createChatSucccess(json) {
+    console.log(json);
+    var data = convertToObject(json);
+    console.log(data);
+    if (data.success === "true") {
+        console.log("chat created");
+    } else {
+        console.log("unable to create chat");
+    }
+}
+
+//</editor-fold>
+
 // </editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Old Code">
@@ -131,7 +180,7 @@ function updateChat() {
                 'state': state,
                 'function': 'retrieve',
                 'idOne': idOne,
-                'idTwo': idTwo,
+                'idTwo': idTwo
             },
             dataType: "json",
             success: function (json) {
@@ -196,4 +245,3 @@ function convertToObject(json) {
     }
 }
 //</editor-fold>
-

@@ -25,6 +25,7 @@ function executeFunction(&$log, $function) {
 
 function prepCreateChatByEmails(&$log) {
     if (count(checkSet(array("emailOne", "emailTwo"))) != 0) {
+        error_log("STuff");
         missingInputs($log);
         return;
     }

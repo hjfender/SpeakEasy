@@ -171,6 +171,7 @@ function prepCreateChat() {
     console.log("creating chat for " + emailOne + " and " + emailTwo);
     createChat(emailOne, emailTwo);
 }
+
 /**
  * Creates a chat in the database between the users of the two given emails
  * Calls createChatSuccess if request successful 

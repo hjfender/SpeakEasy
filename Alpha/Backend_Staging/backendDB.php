@@ -208,7 +208,7 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
             $text = array();
             foreach ($lines as $line_num => $line) {
                 if ($line_num >= $state) {
-                    $text[] = $line = str_replace("\n", "", $line);
+                    $text[] = $line = str_replace("\r","",str_replace("\n", "", $line));
                 }
             }
             $log['state'] = $count;
@@ -263,7 +263,7 @@ function getUserChats(&$log, $user_id) {
     $fileLoc = getUserChatsFilePath($user_id);
     $file = file($fileLoc);
     foreach ($file as $line_num => $line) {
-        $chat_ids[] = $line = str_replace("\n", "", $line);
+        $chat_ids[] = $line = str_replace("\r","",str_replace("\n", "", $line));
     }
     $log['chatIDs'] = $chat_ids;
     $log['success'] = "true";

@@ -107,7 +107,7 @@ function sendMessageSuccess(json) {
 function prepUpdateChat() {
     var chatID = "124";
     console.log("Retrieving messages for chat ID " + selectedChatID);
-    updateChat(selectedChatID, currentState);;
+    updateChat(selectedChatID, currentState);
 }
 
 /**
@@ -122,7 +122,7 @@ function updateChat(chatID, state) {
         type: "POST",
         url: "backendDB.php",
         data: {
-            'function': 'retrieve',
+            'function': 'new messages',
             'token': token,
             'state': state,
             'chatID': chatID
@@ -289,7 +289,9 @@ function convertToObject(json) {
     }
 }
 
-function setSelectedChat(newChat) {
-    selectedChat = newChat;
+function setSelectedChat(newChatID) {
+    selectedChatID = newChatID;
+    console.log("setting selected chat to " + newChatID);
+    console.log(selectedChatID);
 }
 //</editor-fold>

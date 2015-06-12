@@ -49,7 +49,7 @@ function authenticate($token, &$log) {
     } else {
         $array = $results->fetch_array();
         $updated = new DateTime($array[1]);
-        $updated->add(new DateInterval("PT15M"));        
+        $updated->add(new DateInterval("PT15M"));
         $now = new DateTime();
         if ($now > $updated) {
             //Handle timeout
@@ -78,10 +78,9 @@ function executeFunction($command, $user_id, &$log) {
         $log['error'] = "invalid function";
     }
 }
+
 //</editor-fold>
-
 // <editor-fold defaultstate="collapsed" desc="Executable Functions">
-
 // <editor-fold defaultstate="collapsed" desc="Create Chat From IDs">
 /**
  * Gets POST data from Ajax request to create chat for given users
@@ -134,7 +133,6 @@ function createChat(&$log, $user_id_one, $user_id_two) {
         return FALSE;
     }
 }
-
 
 //</editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Send Message">
@@ -198,17 +196,18 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
         $log['error'] = "no access";
         return;
     }
-    $fileLoc = getFileLocation($chat['fileName']);
+    $fileLoc = getChatFilePath($chat_id);
     $seconds = 0;
     while ($seconds < 28) {
         $lines = file($fileLoc);
+        error_log($fileLoc);
         $count = count($lines);
         if ($state < $count) {
             $log['success'] = "true";
             $text = array();
             foreach ($lines as $line_num => $line) {
                 if ($line_num >= $state) {
-                    $text[] = $line = str_replace("\r","",str_replace("\n", "", $line));
+                    $text[] = $line = str_replace("\r", "", str_replace("\n", "", $line));
                 }
             }
             $log['state'] = $count;
@@ -263,7 +262,7 @@ function getUserChats(&$log, $user_id) {
     $fileLoc = getUserChatsFilePath($user_id);
     $file = file($fileLoc);
     foreach ($file as $line_num => $line) {
-        $chat_ids[] = $line = str_replace("\r","",str_replace("\n", "", $line));
+        $chat_ids[] = $line = str_replace("\r", "", str_replace("\n", "", $line));
     }
     $log['chatIDs'] = $chat_ids;
     $log['success'] = "true";
@@ -271,7 +270,6 @@ function getUserChats(&$log, $user_id) {
 }
 
 //</editor-fold>
-
 // <editor-fold defaultstate="collapsed" desc="Misc Utility Functions">
 function userHasAccessToChat($user_id, $chat_id) {
     $chatFileName = getUserChatsFilePath($user_id);
@@ -302,12 +300,10 @@ function getChatByID($chat_id) {
     $chat['chatID'] = $results_array[0];
     $chat['userOneID'] = $results_array[1];
     $chat['userTwoID'] = $results_array[2];
-    $chat['fileName'] = $results_array[3];
     return $chat;
 }
 
 // </editor-fold>
-
 // <editor-fold defaultstate="collapsed" desc="Old Code">
 function connectToChat(&$log) {
     if (count(checkSet(array("emailOne", "emailTwo"))) != 0) {
@@ -331,8 +327,6 @@ function connectToChat(&$log) {
         $log['error'] = "profiles not found";
     }
 }
-
-
 
 function validUserID($id) {
     $conn = connectToDatabase("speakeasy");

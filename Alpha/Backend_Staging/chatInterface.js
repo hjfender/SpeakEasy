@@ -1,5 +1,3 @@
-var idOne;
-var idTwo;
 var instance;
 var token;
 var state = 0;
@@ -8,6 +6,34 @@ function passToken(token1) {
     token = token1;
 }
 
+// <editor-fold defaultstate="collapsed" desc="Normal Functions">
+function getChatIDs() {
+    console.log("Getting Chat IDs");
+    $.ajax({
+        type: "POST",
+        url: "backendDB.php",
+        data: {
+            'token': token,
+            'function': 'retrive chat ids'
+        },
+        dataType: "json",
+        success: function (json) {
+            console.log(json);
+            var data = convertToObject(json);
+            if (data.success === "true") {
+                console.log("Got Chat IDs");
+                for (var i = 0; i < data.chatIDs.length; i++) {
+                    var item = data.chatIDs[i].replace("\n", "");
+                    var command = "getMessages(\'" + item + "\')";
+                    $('#chat-ids-area').append($("<div>" + item + " <button onclick=\"" + command + "\">Open Chat</button></div>"));
+                }
+            }
+        }
+    });
+}
+//</editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc="Sudo Functions">
 function createChat() {
     var emailOne = document.getElementById("emailOneCreate").value;
     var emailTwo = document.getElementById("emailTwoCreate").value;
@@ -24,7 +50,7 @@ function createChat() {
         datatype: "json",
         success: function (json) {
             console.log(json);
-            var data = convert(json);
+            var data = convertToObject(json);
             console.log(data);
             if (data.success === "true") {
                 console.log("chat created");
@@ -34,7 +60,9 @@ function createChat() {
         }
     });
 }
+// </editor-fold>
 
+// <editor-fold defaultstate="collapsed" desc="Old Code">
 function connectToChat() {
     console.log("Connecting to chat");
     var emailOne = document.getElementById("emailOne").value;
@@ -54,7 +82,7 @@ function connectToChat() {
         dataType: "json",
         success: function (json) {
             console.log(json);
-            var data = convert(json);
+            var data = convertToObject(json);
             if (data.success === "true") {
                 console.log("Connected to chat");
                 idOne = data.idOne;
@@ -84,7 +112,7 @@ function sendMessage() {
         dataType: "json",
         success: function (json) {
             console.log(json);
-            var data = convert(json);
+            var data = convertToObject(json);
             document.getElementById("message").value = "";
             updateChat();
         }
@@ -109,7 +137,7 @@ function updateChat() {
             success: function (json) {
                 console.log("Recieved a response");
                 console.log(json);
-                var data = convert(json);
+                var data = convertToObject(json);
                 var name = document.getElementById("name").value;
                 if (data.success) {
                     console.log("Got messages:");
@@ -146,7 +174,7 @@ function getMessages(chatID) {
         dataType: "json",
         success: function (json) {
             console.log(json);
-            var data = convert(json);
+            var data = convertToObject(json);
             if (data.success === "true") {
                 console.log("got messages");
                 for (var i = 0; i < data.text.length; i++) {
@@ -157,32 +185,9 @@ function getMessages(chatID) {
         }
     });
 }
+//</editor-fold>
 
-function getChatIDs() {
-    console.log("Getting Chat IDs");
-    $.ajax({
-        type: "POST",
-        url: "backendDB.php",
-        data: {
-            'token': token,
-            'function': 'retrive chat ids'
-        },
-        dataType: "json",
-        success: function (json) {
-            console.log(json);
-            data = convert(json);
-            if (data.success === "true") {
-                console.log("Got Chat IDs");
-                for (var i = 0; i < data.chatIDs.length; i++) {
-                    var item = data.chatIDs[i].replace("\n", "");
-                    var command = "getMessages(\'" + item + "\')";
-                    $('#chat-ids-area').append($("<div>" + item + " <button onclick=\"" + command + "\">Open Chat</button></div>"));
-                }
-            }
-        }
-    });
-}
-
+// <editor-fold defaultstate="collapsed" desc="Utility Functions">
 function convertToObject(json) {
     if (typeof json === "string") {
         return jQuery.parseJSON(json);
@@ -190,5 +195,5 @@ function convertToObject(json) {
         return json;
     }
 }
-
+//</editor-fold>
 

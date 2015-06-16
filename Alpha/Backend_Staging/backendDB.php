@@ -88,7 +88,7 @@ function executeFunction($command, $user_id, &$log) {
  * @param type $log Log for Javascript response
  */
 function prepCreateChat(&$log) {
-    if (count(checkSet(array("idOne", "idTwo"))) == 0) {
+    if (count(checkSet(array("idOne", "idTwo"),$_POST)) != 0) {
         missingInputs($log);
         return;
     }
@@ -124,7 +124,8 @@ function createChat(&$log, $user_id_one, $user_id_two) {
     if ($conn->query($insertQuery)) {
         $log['success'] = "true";
         $log['response'] = "chat created";
-        fwrite(fopen("chats/" . $uuid . ".txt", 'a'), $emailOne . " " . $emailTwo);
+        $chatMetaData = "{chatid:'" . $uuid . "', userOneID:'" . $user_id_one . "', userOneName:'user one', userTwoID:'" . $user_id_two + "', userTwoName:'user two', count:0}";
+        fwrite(fopen("chats/" . $uuid . ".txt", 'a'), $chatMetaData);
         addChatToUserFile($user_id_one, $uuid);
         addChatToUserFile($user_id_two, $uuid);
         return TRUE;
@@ -144,7 +145,7 @@ function createChat(&$log, $user_id_one, $user_id_two) {
  * @param string $user_id ID of authenticated user
  */
 function prepSendMessage(&$log, $user_id) {
-    if (count(checkSet(array("message", "chatID"))) != 0) {
+    if (count(checkSet(array("message", "chatID"),$_POST)) != 0) {
         $log['success'] = "false";
         $log['error'] = "missing inputs";
         return;
@@ -175,7 +176,7 @@ function sendMessage(&$log, $user_id, $chat_id, $message) {
 //</editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Retrieve New Messages">
 function prepRetrieveNewMessages(&$log, $user_id) {
-    if (count(checkSet(array("chatID", "state"))) != 0) {
+    if (count(checkSet(array("chatID", "state"),$_POST)) != 0) {
         $log['success'] = "false";
         $log['error'] = "missing inputs";
         return;
@@ -200,16 +201,18 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
     $fileLoc = getChatFilePath($chat_id);
     $seconds = 0;
     while ($seconds < 28) {
-        $lines = file($fileLoc);
-        error_log($fileLoc);
-        $count = count($lines);
+        $chatFile = fopen($fileLoc, 'r');
+        $chatData = json_decode(fgets($chatFile)); //Decode chat metadata
+        $count = $chatData['count'];
         if ($state < $count) {
             $log['success'] = "true";
             $text = array();
-            foreach ($lines as $line_num => $line) {
+            $line_num = 1;
+            while(($line = fgets($chatFile)) !== FALSE) {
                 if ($line_num >= $state) {
                     $text[] = $line = str_replace("\r", "", str_replace("\n", "", $line));
                 }
+                $line_num = $line_num + 1;
             }
             $log['state'] = $count;
             $log['text'] = $text;
@@ -226,7 +229,7 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Get Last N Messages">
 function prepRetrieveLastNMessages(&$log, $user_id) {
-    if (count(checkSet(array("chatID", "numMessages"))) != 0) {
+    if (count(checkSet(array("chatID", "numMessages"),$_POST)) != 0) {
         missingInputs($log);
         return;
     }
@@ -309,7 +312,7 @@ function getChatByID($chat_id) {
 
 // <editor-fold defaultstate="collapsed" desc="Old Code">
 function connectToChat(&$log) {
-    if (count(checkSet(array("emailOne", "emailTwo"))) != 0) {
+    if (count(checkSet(array("emailOne", "emailTwo"),$_POST)) != 0) {
         missingInputs($log);
         return;
     }

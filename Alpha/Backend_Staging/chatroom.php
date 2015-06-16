@@ -13,7 +13,7 @@
     </head>
     <body>
         <div id="chat-ids-area"> </div>
-        <div><form action="javascript:createChat()">
+        <div><form action="javascript:prepCreateChat()">
                 <div>
                     <div>
                         Email One: <input type="text" id="emailOneCreate" /> 

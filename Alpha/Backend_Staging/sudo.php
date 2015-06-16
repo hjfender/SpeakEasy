@@ -24,8 +24,8 @@ function executeFunction(&$log, $function) {
 }
 
 function prepCreateChatByEmails(&$log) {
-    if (count(checkSet(array("emailOne", "emailTwo"))) != 0) {
-        error_log("STuff");
+    if (count(checkSet(array("emailOne", "emailTwo"), $_POST)) != 0) {
+        error_log("Missing inputs");
         missingInputs($log);
         return;
     }
@@ -63,8 +63,13 @@ function createChatByEmails(&$log, $email_one, $email_two) {
             $log['response'] = "chat created";
             addChatToUserFile($id_one, $chat_id);
             addChatToUserFile($id_two, $chat_id);
-
-            fwrite(fopen(getChatFilePath($chat_id), 'a'), $email_one . " " . $email_two);
+            
+            $chatMetaData = "{chatid:'" . $chat_id . "', userOne:'" . $id_one . "', userOneName:'" . $email_one . "', userTwo:'" . $email_two . "', count:0}";
+            $chatFile = fopen(getChatFilePath($chat_id),'w');
+            if($chatFile === FALSE){
+                error_log("ERROR");
+            }
+            fwrite($chatFile, $chatMetaData);
         } else {
             $log['success'] = "false";
             $log['error'] = "unable to create chat";

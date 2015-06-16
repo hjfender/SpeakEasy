@@ -83,10 +83,11 @@ function addChatToUserFile($user_id, $chat_id) {
  * @param array $toCheck The Array to check set
  * @return array Of unset variables
  */
-function checkSet($toCheck) {
+function checkSet($toCheck,$array) {
     $unchecked = array();
     foreach ($toCheck as $value) {
-        if (!isset($_POST, $value)) {
+        if (!isset($array, $value))  {
+            error_log("ERROR");
             array_push($unchecked, $value);
         }
     }

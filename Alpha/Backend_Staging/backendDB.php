@@ -80,7 +80,6 @@ function executeFunction($command, $user_id, &$log) {
 }
 
 //</editor-fold>
-
 // <editor-fold defaultstate="collapsed" desc="Executable Functions">
 // <editor-fold defaultstate="collapsed" desc="Create Chat From IDs">
 /**
@@ -88,7 +87,7 @@ function executeFunction($command, $user_id, &$log) {
  * @param type $log Log for Javascript response
  */
 function prepCreateChat(&$log) {
-    if (count(checkSet(array("idOne", "idTwo"),$_POST)) != 0) {
+    if (count(checkSet(array("idOne", "idTwo"), $_POST)) != 0) {
         missingInputs($log);
         return;
     }
@@ -145,7 +144,7 @@ function createChat(&$log, $user_id_one, $user_id_two) {
  * @param string $user_id ID of authenticated user
  */
 function prepSendMessage(&$log, $user_id) {
-    if (count(checkSet(array("message", "chatID"),$_POST)) != 0) {
+    if (count(checkSet(array("message", "chatID"), $_POST)) != 0) {
         $log['success'] = "false";
         $log['error'] = "missing inputs";
         return;
@@ -156,19 +155,42 @@ function prepSendMessage(&$log, $user_id) {
 }
 
 function sendMessage(&$log, $user_id, $chat_id, $message) {
-    $chat = getChatByID($chat_id);
-    if ($chat === FALSE) {
+    $chatInfo = getChatByID($chat_id);
+    if ($chatInfo === FALSE) {
         $log['success'] = "false";
         $log['error'] = "invalid chat id";
         return;
     }
-    if (!($chat['userOneID'] == $user_id || $chat['userTwoID'] == $user_id)) {
+    if (!($chatInfo['userOneID'] == $user_id || $chatInfo['userTwoID'] == $user_id)) {
         $log['success'] = "false";
         $log['error'] = "no access";
         return;
     }
     $chatFilePath = getChatFilePath($chat_id);
-    fwrite(fopen($chatFilePath, 'a'), "\n<span>" . $user_id . ": </span>" . (str_replace("\n", " ", $message)) . "\n");
+
+    //Increment Chat count
+    $chat = fopen($chatFilePath, 'r');
+    $firstLine = fgets($chat);
+    error_log("First Line:" .$firstLine);
+    $chatData = json_decode($firstLine,TRUE);
+    fclose($chat);
+    foreach ($chatData as $key => $value) {
+        error_log($key . ":" . $value);
+    }
+    error_log(gettype($chatData));
+    $chatData['count'] = $chatData['count'] + 1;
+    $chat = fopen($chatFilePath, 'r+');
+    fwrite($chat, json_encode($chatData) . "\n");
+    fclose($chat);
+
+    //Add Message
+    $now = date("Y-m-d H:i:s");
+    $messageData = "{sender:'" . $user_id . "', sent:'" . $now . "', message:'" . $message . "'}";
+    $chat = fopen($chatFilePath, 'a');
+    fwrite($chat, $messageData . "\n");
+    fclose($chat);
+    
+    //Response
     $log['success'] = "true";
     $log['response'] = "message sent";
 }
@@ -176,7 +198,7 @@ function sendMessage(&$log, $user_id, $chat_id, $message) {
 //</editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Retrieve New Messages">
 function prepRetrieveNewMessages(&$log, $user_id) {
-    if (count(checkSet(array("chatID", "state"),$_POST)) != 0) {
+    if (count(checkSet(array("chatID", "state"), $_POST)) != 0) {
         $log['success'] = "false";
         $log['error'] = "missing inputs";
         return;
@@ -208,7 +230,7 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
             $log['success'] = "true";
             $text = array();
             $line_num = 1;
-            while(($line = fgets($chatFile)) !== FALSE) {
+            while (($line = fgets($chatFile)) !== FALSE) {
                 if ($line_num >= $state) {
                     $text[] = $line = str_replace("\r", "", str_replace("\n", "", $line));
                 }
@@ -229,7 +251,7 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Get Last N Messages">
 function prepRetrieveLastNMessages(&$log, $user_id) {
-    if (count(checkSet(array("chatID", "numMessages"),$_POST)) != 0) {
+    if (count(checkSet(array("chatID", "numMessages"), $_POST)) != 0) {
         missingInputs($log);
         return;
     }
@@ -274,7 +296,6 @@ function getUserChats(&$log, $user_id) {
 }
 
 //</editor-fold>
-
 // <editor-fold defaultstate="collapsed" desc="Misc Utility Functions">
 function userHasAccessToChat($user_id, $chat_id) {
     $chatFileName = getUserChatsFilePath($user_id);
@@ -309,10 +330,9 @@ function getChatByID($chat_id) {
 }
 
 // </editor-fold>
-
 // <editor-fold defaultstate="collapsed" desc="Old Code">
 function connectToChat(&$log) {
-    if (count(checkSet(array("emailOne", "emailTwo"),$_POST)) != 0) {
+    if (count(checkSet(array("emailOne", "emailTwo"), $_POST)) != 0) {
         missingInputs($log);
         return;
     }

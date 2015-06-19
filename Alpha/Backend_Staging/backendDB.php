@@ -1,7 +1,7 @@
 <?php
 
 include "utils.php";
-
+error_reporting(E_ALL & ~E_NOTICE);
 // <editor-fold defaultstate="collapsed" desc="Main Code">
 /**
  * Creates Log array to return to with request. Authenticates user. Creates
@@ -12,7 +12,7 @@ function main() {
     if (!isset($_POST['token'])) {
         $log['success'] = "false";
         $log['error'] = "no authentication token given";
-        error_log("Unable to Authenticate2");
+        error_log("Unable to Authenticate ~ No token given");;
     } else if (!isset($_POST['function'])) {
         $log['success'] = "false";
         $log['error'] = "no function given";
@@ -44,7 +44,7 @@ function authenticate($token, &$log) {
     $conn = connectToDatabase();
     $results = $conn->query($query);
     if ($results->num_rows === 0) {
-        error_log("Unable to Authenticate2" . $token);
+        error_log("Unable to Authenticate ~ unable to find token " . $token);
         return FALSE;
     } else {
         $array = $results->fetch_array();
@@ -175,9 +175,12 @@ function sendMessage(&$log, $user_id, $chat_id, $message) {
 
     //Add Message to file
     $now = date("Y-m-d H:i:s");
-    $messageData = "{sender:'" . $user_id . "', sent:'" . $now . "', message:'" . $message . "'}";
+    $messageData = array();
+    $messageData['sender'] = $user_id;
+    $messageData['sent'] = $now;
+    $messageData['message'] = $message;
     $chat = fopen($chatFilePath, 'a');
-    fwrite($chat, $messageData . "\n");
+    fwrite($chat, json_encode($messageData) . "\n");
     fclose($chat);
     
     //Response
@@ -192,7 +195,6 @@ function incrementChatCount($chatFilePath) {
     //Get Chat Data
     $chat = fopen($chatFilePath, 'r');
     $firstLine = fgets($chat);
-    error_log("First Line:" .$firstLine);
     $chatData = json_decode($firstLine,TRUE);
     fclose($chat);
     
@@ -235,7 +237,7 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
     $seconds = 0;
     while ($seconds < 28) {
         $chatFile = fopen($fileLoc, 'r');
-        $chatData = json_decode(fgets($chatFile)); //Decode chat metadata
+        $chatData = json_decode(fgets($chatFile),TRUE); //Decode chat metadata
         $count = $chatData['count'];
         if ($state < $count) {
             $log['success'] = "true";

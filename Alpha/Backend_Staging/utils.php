@@ -29,12 +29,12 @@ function generateUUID() {
  * @return \mysqli connections
  */
 function connectToDatabase($database = "speakeasy") {
-    $serverfirst = "localhost";
-    $userfirst = "root";
+    $serverip = "localhost";
+    $username = "root";
     $password = "";
 
     // Create connection
-    $conn = new mysqli($serverfirst, $userfirst, $password, $database);
+    $conn = new mysqli($serverip, $username, $password, $database);
     // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);

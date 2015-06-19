@@ -223,12 +223,14 @@ function prepRetrieveNewMessages(&$log, $user_id) {
 
 function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
     $chat = getChatByID($chat_id);
+    //Unable to find chat with given ID
     if ($chat === FALSE) {
         $log['success'] = "false";
         $log['error'] = "invalid chat id";
         return;
     }
-    if (!($chat['userOneID'] == $user_id) || $chat['userTwoID'] == $user_id) {
+    //User associated with token not part of given chat
+    if (!($chat['userOneID'] == $user_id || $chat['userTwoID'] == $user_id)) {
         $log['success'] = "false";
         $log['error'] = "no access";
         return;
@@ -236,23 +238,34 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
     $fileLoc = getChatFilePath($chat_id);
     $seconds = 0;
     while ($seconds < 28) {
+        //Get the metadata to know how many messages snet
         $chatFile = fopen($fileLoc, 'r');
         $chatData = json_decode(fgets($chatFile),TRUE); //Decode chat metadata
         $count = $chatData['count'];
+        
+        //If true, new message sent since sent query
         if ($state < $count) {
             $log['success'] = "true";
+            
+            $names = array();
+            $names[$chatData['userOne']] = $chatData['userOneName'];
+            $names[$chatData['userTwo']] = $chatData['userTwoName'];
+            
             $text = array();
             $line_num = 1;
+            //Get only but all new messages
             while (($line = fgets($chatFile)) !== FALSE) {
-                if ($line_num >= $state) {
-                    $text[] = $line = str_replace("\r", "", str_replace("\n", "", $line));
+                if ($line_num > $state) {
+                    $messageData = json_decode($line, TRUE);
+                    $text[] = $names[$messageData['sender']] . ": " . $messageData['message'];
                 }
                 $line_num = $line_num + 1;
             }
             $log['state'] = $count;
             $log['text'] = $text;
             return;
-        }
+        } 
+        fclose($chatFile);
         sleep(1);
         $seconds = $seconds + 1;
     }

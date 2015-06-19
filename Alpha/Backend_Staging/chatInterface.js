@@ -95,7 +95,6 @@ function sendMessageSuccess(json) {
     console.log(json);
     var data = convertToObject(json);
     document.getElementById("message").value = "";
-    updateChat();
 }
 //</editor-fold>
 
@@ -105,8 +104,7 @@ function sendMessageSuccess(json) {
  * @returns 
  */
 function prepUpdateChat() {
-    var chatID = "124";
-    console.log("Retrieving messages for chat ID " + selectedChatID);
+    console.log("Retrieving new messages for " + selectedChatID);
     updateChat(selectedChatID, currentState);
 }
 
@@ -140,19 +138,22 @@ function updateChat(chatID, state) {
 function updateChatSuccess(json) {
     console.log(json);
     var data = convertToObject(json);
-    
+
     if (data.success === "true") {
-        if (data.text) {
-            var j = 0; 
+        if (data.text !== "false") {
+            var j = 0;
             for (var i = 0; i < data.text.length; i++) {
                 $('#chat-area').append($("<p>" + data.text[i] + "</p>"));
                 j = j + 1;
             }
             currentState = j;
+            document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
+            currentState = data.state;
         }
+         prepUpdateChat();
     }
-    document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
-    currentState = data.state;
+   
+
 }
 //</editor-fold>
 

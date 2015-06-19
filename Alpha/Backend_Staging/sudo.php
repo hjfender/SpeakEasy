@@ -64,12 +64,19 @@ function createChatByEmails(&$log, $email_one, $email_two) {
             addChatToUserFile($id_one, $chat_id);
             addChatToUserFile($id_two, $chat_id);
             
-            $chatMetaData = '{chatid:"' . $chat_id . '", userOne:"' . $id_one . '", userOneName:"' . $email_one . '", userTwo:"' . $email_two . '", count:0}';
+            $chatMetaData = array();
+            $chatMetaData['chatID'] = $chat_id;
+            $chatMetaData['userOne'] = $id_one;
+            $chatMetaData['userOneName'] = $email_one;
+            $chatMetaData['userTwo'] = $id_two;
+            $chatMetaData['userTwoName'] = $email_two;
+            $chatMetaData['count'] = 0;
             $chatFile = fopen(getChatFilePath($chat_id),'w');
             if($chatFile === FALSE){
                 error_log("ERROR");
             }
-            fwrite($chatFile, $chatMetaData);
+            //With a buffer to avoid overriding next line in the future. 
+            fwrite($chatFile, json_encode($chatMetaData) . "      ");
         } else {
             $log['success'] = "false";
             $log['error'] = "unable to create chat";

@@ -156,34 +156,24 @@ function prepSendMessage(&$log, $user_id) {
 
 function sendMessage(&$log, $user_id, $chat_id, $message) {
     $chatInfo = getChatByID($chat_id);
+    //No chat by given ID
     if ($chatInfo === FALSE) {
         $log['success'] = "false";
         $log['error'] = "invalid chat id";
         return;
     }
+    //User not part of given chat ID
     if (!($chatInfo['userOneID'] == $user_id || $chatInfo['userTwoID'] == $user_id)) {
         $log['success'] = "false";
         $log['error'] = "no access";
         return;
     }
     $chatFilePath = getChatFilePath($chat_id);
+    
+    //Update chat meta data
+    incrementChatCount($chatFilePath);
 
-    //Increment Chat count
-    $chat = fopen($chatFilePath, 'r');
-    $firstLine = fgets($chat);
-    error_log("First Line:" .$firstLine);
-    $chatData = json_decode($firstLine,TRUE);
-    fclose($chat);
-    foreach ($chatData as $key => $value) {
-        error_log($key . ":" . $value);
-    }
-    error_log(gettype($chatData));
-    $chatData['count'] = $chatData['count'] + 1;
-    $chat = fopen($chatFilePath, 'r+');
-    fwrite($chat, json_encode($chatData) . "\n");
-    fclose($chat);
-
-    //Add Message
+    //Add Message to file
     $now = date("Y-m-d H:i:s");
     $messageData = "{sender:'" . $user_id . "', sent:'" . $now . "', message:'" . $message . "'}";
     $chat = fopen($chatFilePath, 'a');
@@ -193,6 +183,27 @@ function sendMessage(&$log, $user_id, $chat_id, $message) {
     //Response
     $log['success'] = "true";
     $log['response'] = "message sent";
+}
+/**
+ * Updates the count variable of the chat metadata. 
+ * @param String $chatFilePath File path of the chat to increment. 
+ */
+function incrementChatCount($chatFilePath) {
+    //Get Chat Data
+    $chat = fopen($chatFilePath, 'r');
+    $firstLine = fgets($chat);
+    error_log("First Line:" .$firstLine);
+    $chatData = json_decode($firstLine,TRUE);
+    fclose($chat);
+    
+    //Increment count
+    $chatData['count'] = $chatData['count'] + 1;
+   
+    
+    //Write data to first line
+    $chat = fopen($chatFilePath, 'r+');
+    fwrite($chat, json_encode($chatData));
+    fclose($chat);
 }
 
 //</editor-fold>

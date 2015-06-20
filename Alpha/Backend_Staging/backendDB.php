@@ -245,7 +245,8 @@ function retrieveMessageRange(&$log, $user_id, $chat_id, $begin, $end) {
     
     $fileLoc = getChatFilePath($chat_id);
     $chatMetaData = getChatMetaData($chat_id);
-    if ($begin > $chatMetaData['count']) {
+    $count = $chatMetaData['count'];
+    if ($begin > $count) {
         $log['response'] = "too few messages";
         $log['messages'] = "false";
         return;
@@ -253,8 +254,30 @@ function retrieveMessageRange(&$log, $user_id, $chat_id, $begin, $end) {
     if($end > $count) {
         $end = $count;
     }
+    
+    $names = getNamesFromChatMetaData($chatMetaData);
+    $chatFile = fopen($fileLoc, "r");
+    $messages = array();
+    fgets($chatFile); //Skip metadata
+    $line_num = 0; 
+    while(($line = fgets($chatFile) !== FALSE)) {
+        if($line_num >= $begin && $line_num <= $end) {
+            $messageArray = json_decode($line, TRUE);
+            $messageArray['sender'] = $names[$messageArray['sender']]; //Replace id with name in chat
+            $messages[] = json_encode($messageArray);
+        }
+    }
+    
+    $log['messages'] = $messages;
+    $log['response'] = "retrieved messages";
 }
 
+/**
+ * True ifthe range is valid and not less than zero
+ * @param type $begin begining of range
+ * @param type $end End of range
+ * @return boolean 
+ */
 function isValidRange($begin, $end) {
     if($end < $begin) {
         return FALSE;
@@ -263,6 +286,18 @@ function isValidRange($begin, $end) {
     } else {
         return TRUE;
     }
+}
+
+/**
+ * Gets names for the users in the chat in an associative array
+ * @param Array $chatMetaData MetaData for a chat
+ * @return Array Associative array with userID matched with name in chat
+ */
+function getNamesFromChatMetaData($chatMetaData) {
+    $names = array();
+    $names[$chatMetaData['userOne']] = $chatMetaData['userOneName'];
+    $names[$chatMetaData['userTwo']] = $chatMetaData['userTwoName'];
+    return $names;
 }
 
 //</editor-fold>

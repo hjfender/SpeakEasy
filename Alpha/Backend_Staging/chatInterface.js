@@ -140,10 +140,10 @@ function updateChatSuccess(json) {
     var data = convertToObject(json);
 
     if (data.success === "true") {
-        if (data.text !== "false") {
+        if (data.messages !== "false") {
             var j = 0;
-            for (var i = 0; i < data.text.length; i++) {
-                $('#chat-area').append($("<p>" + data.text[i] + "</p>"));
+            for (var i = 0; i < data.messages.length; i++) {
+                $('#chat-area').append($("<p>" + data.messages[i] + "</p>"));
                 j = j + 1;
             }
             currentState = j;

@@ -1,39 +1,20 @@
-{"chatID":"911c7b2e92d24bf281ab8c409f4daaea","userOne":"bd70b625064347b3b6961b859d494c75","userOneName":"nread@macalester.edu","userTwo":"ed6aa2ff192d47d6a56b0ed21f56cbbb","userTwoName":"rberman@macalester.edu","count":38}  
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 07:49:47","message":"Stuff"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 07:50:14","message":"Dog"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 07:50:27","message":"rascal"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 07:50:28","message":"boop"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 07:50:31","message":"dude"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 07:50:33","message":"banana"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 07:52:09","message":"hello world"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 07:52:55","message":"asjdf"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 07:56:27","message":"Sneding a message"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:31:50","message":"Woo!"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:32:05","message":"Woo!"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:33:14","message":"Banana pie!"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:33:29","message":"rascal "}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:35:13","message":"d"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:36:03","message":"reddit"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:36:09","message":"reddit"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:36:38","message":"banana"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:36:46","message":"bababa"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:37:35","message":""}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:37:36","message":""}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:37:36","message":""}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:37:37","message":""}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:37:37","message":""}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:37:37","message":""}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:37:38","message":""}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:37:39","message":""}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:39:06","message":"dude"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:39:11","message":"cool"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:39:14","message":"hello world!"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:39:41","message":"dude"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:49:28","message":"auto update?"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:49:31","message":"sweet!"}
-{"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-19 08:49:34","message":"and data!"}
-{"sender":"ed6aa2ff192d47d6a56b0ed21f56cbbb","sent":"2015-06-19 08:49:39","message":"im ruthie?"}
-{"sender":"ed6aa2ff192d47d6a56b0ed21f56cbbb","sent":"2015-06-19 08:49:42","message":"i am ruthie!"}
-{"sender":"ed6aa2ff192d47d6a56b0ed21f56cbbb","sent":"2015-06-19 08:49:43","message":"yay!"}
-{"sender":"ed6aa2ff192d47d6a56b0ed21f56cbbb","sent":"2015-06-19 08:49:48","message":"thats who i logged in as !"}
-{"sender":"ed6aa2ff192d47d6a56b0ed21f56cbbb","sent":"2015-06-19 08:49:50","message":"what up!"}
+{"chatID":"911c7b2e92d24bf281ab8c409f4daaea","userOne":"bd70b625064347b3b6961b859d494c75","userOneName":"nread@macalester.edu","userTwo":"ed6aa2ff192d47d6a56b0ed21f56cbbb","userTwoName":"rberman@macalester.edu","count":19} 
+{"index":0,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 07:54:17","message":"banana"}
+{"index":1,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:00:23","message":"poop"}
+{"index":2,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:01:19","message":"banana"}
+{"index":3,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:01:22","message":"turd"}
+{"index":4,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:01:26","message":"rudy doo"}
+{"index":5,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:30:30","message":"rascal"}
+{"index":6,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:30:34","message":"things"}
+{"index":7,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:33:06","message":"dude"}
+{"index":8,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:33:40","message":"poop"}
+{"index":9,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:33:47","message":"poop"}
+{"index":10,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:33:47","message":""}
+{"index":11,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:33:55","message":"poop"}
+{"index":12,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:56:09","message":"stuff"}
+{"index":13,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:56:10","message":"stuff"}
+{"index":14,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:56:12","message":"stuff"}
+{"index":15,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:56:14","message":"sbanana"}
+{"index":16,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:56:17","message":"slkasjdf"}
+{"index":17,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:56:20","message":"lkdj"}
+{"index":18,"sender":"bd70b625064347b3b6961b859d494c75","sent":"2015-06-20 08:56:53","message":"sdfg"}

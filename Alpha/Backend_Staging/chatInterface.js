@@ -141,19 +141,58 @@ function updateChatSuccess(json) {
 
     if (data.success === "true") {
         if (data.messages !== "false") {
-            var j = 0;
             for (var i = 0; i < data.messages.length; i++) {
-                $('#chat-area').append($("<p>" + data.messages[i] + "</p>"));
-                j = j + 1;
+                var messageData =  jQuery.parseJSON(data.messages[i]);;
+                $('#chat-area').append($("<p>" + messageData.sender + ": " + messageData.message + "</p>"));
+                currentState = messageData.index;
             }
-            currentState = j;
             document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
             currentState = data.state;
         }
-         prepUpdateChat();
+        prepUpdateChat();
     }
-   
 
+
+}
+//</editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc="Get initial messages">
+function prepGetInitialMessages() {
+    console.log("getting initial messages");
+    getInitialMessages(selectedChatID, 15);
+}
+
+function getInitialMessages(chatID, numMessages) {
+    $.ajax({
+        type: "POST",
+        url: "backendDB.php",
+        data: {
+            'function': 'last n messages',
+            'token': token,
+            'numMessages': numMessages,
+            'chatID': chatID
+        },
+        dataType: "json",
+        success: getInitialMessagesSuccess
+    });
+}
+
+function getInitialMessagesSuccess(json) {
+    console.log(json);
+    var data = convertToObject(json);
+
+    if (data.success === "true") {
+        if (data.messages !== "false") {
+            var j = 0;
+            for (var i = 0; i < data.messages.length; i++) {
+                var messageData =  jQuery.parseJSON(data.messages[i]);;
+                $('#chat-area').append($("<p>" + messageData.sender + ": " + messageData.message + "</p>"));
+                currentState = messageData.index;
+            }
+            document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
+        }
+        prepUpdateChat();
+    }
 }
 //</editor-fold>
 
@@ -294,5 +333,6 @@ function setSelectedChat(newChatID) {
     selectedChatID = newChatID;
     console.log("setting selected chat to " + newChatID);
     console.log(selectedChatID);
+    prepGetInitialMessages();
 }
 //</editor-fold>

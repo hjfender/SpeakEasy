@@ -171,11 +171,12 @@ function sendMessage(&$log, $user_id, $chat_id, $message) {
     $chatFilePath = getChatFilePath($chat_id);
     
     //Update chat meta data
-    incrementChatCount($chatFilePath);
+    $count = incrementChatCount($chatFilePath);
 
     //Add Message to file
     $now = date("Y-m-d H:i:s");
     $messageData = array();
+    $messageData['index'] = $count - 1;
     $messageData['sender'] = $user_id;
     $messageData['sent'] = $now;
     $messageData['message'] = $message;
@@ -206,6 +207,7 @@ function incrementChatCount($chatFilePath, $amount = 1) {
     $chat = fopen($chatFilePath, 'r+');
     fwrite($chat, json_encode($chatData));
     fclose($chat);
+    return $chatData['count'];
 }
 
 //</editor-fold>
@@ -343,18 +345,19 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
             $names[$chatData['userOne']] = $chatData['userOneName'];
             $names[$chatData['userTwo']] = $chatData['userTwoName'];
             
-            $text = array();
+            $messages = array();
             $line_num = 1;
             //Get only but all new messages
             while (($line = fgets($chatFile)) !== FALSE) {
                 if ($line_num > $state) {
                     $messageData = json_decode($line, TRUE);
-                    $text[] = $names[$messageData['sender']] . ": " . $messageData['message'];
+                    $messageData['sender'] = $names[$messageData['sender']];
+                    $messages[] = json_encode($messageData);
                 }
                 $line_num = $line_num + 1;
             }
             $log['state'] = $count;
-            $log['text'] = $text;
+            $log['messages'] = $messages;
             return;
         } 
         fclose($chatFile);
@@ -362,7 +365,7 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
         $seconds = $seconds + 1;
     }
     $log['state'] = $state;
-    $log['text'] = "false";
+    $log['messages'] = "false";
     $log['success'] = "true";
 }
 
@@ -458,6 +461,10 @@ function getChatByID($chat_id) {
     return $chat;
 }
 
+function missingInputs(&$log) {
+    $log['success'] = "false";
+    $log['error'] = "missing inputs";
+}
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Old Code">
 function connectToChat(&$log) {
@@ -531,16 +538,6 @@ function getFileName($idOne, $idTwo) {
     $results["file_name"][0];
     return $results;
 }
-
-function missingInputs(&$log) {
-    $log['success'] = "false";
-    $log['error'] = "missing inputs";
-}
-
-function getFileLocation($fileName) {
-    return "chats/" . $fileName . ".txt";
-}
-
 // </editor-fold>
 
 main();

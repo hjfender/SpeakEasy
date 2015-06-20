@@ -191,7 +191,7 @@ function sendMessage(&$log, $user_id, $chat_id, $message) {
  * Updates the count variable of the chat metadata. 
  * @param String $chatFilePath File path of the chat to increment. 
  */
-function incrementChatCount($chatFilePath) {
+function incrementChatCount($chatFilePath, $amount = 1) {
     //Get Chat Data
     $chat = fopen($chatFilePath, 'r');
     $firstLine = fgets($chat);
@@ -199,13 +199,70 @@ function incrementChatCount($chatFilePath) {
     fclose($chat);
     
     //Increment count
-    $chatData['count'] = $chatData['count'] + 1;
+    $chatData['count'] = $chatData['count'] + $amount;
    
     
     //Write data to first line
     $chat = fopen($chatFilePath, 'r+');
     fwrite($chat, json_encode($chatData));
     fclose($chat);
+}
+
+//</editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc="Retrieve Range of Messages">
+function prepRetrieveMessageRange(&$log, $user_id) {
+    if(count(checkset(array("chatID", "begin", "end"), $_POST)) != 0) {
+        missingInputs($log);
+        return;
+    }
+   $chat_id = $_POST['chatID'];
+   $begin = $_POST['begin'];
+   $end = $_POST['end'];
+   retrieveMessageRange($log, $user_id, $chat_id, $begin, $end);
+}
+
+function retrieveMessageRange(&$log, $user_id, $chat_id, $begin, $end) {
+    if(!isValidRange($begin, $end)) {
+        $log['success'] = "false";
+        $log['error'] = "invalid range";
+        return;
+    }
+    $chat = getChatById($chat_id);
+    //Unable to find chat with given ID
+    if($chat === FALSE) {
+        $log['success'] = "false";
+        $log['error'] = "invalid chat id";
+        return;
+    }
+    //User assoiated with token not part of given chat
+    if (!($chat['userOneID'] == $user_id || $chat['userTwohID'] == $user_id)) {
+        $log['success'] = "false";
+        $log['error'] = "no access";
+        return;
+    }
+    $log['success'] = "true";
+    
+    $fileLoc = getChatFilePath($chat_id);
+    $chatMetaData = getChatMetaData($chat_id);
+    if ($begin > $chatMetaData['count']) {
+        $log['response'] = "too few messages";
+        $log['messages'] = "false";
+        return;
+    }
+    if($end > $count) {
+        $end = $count;
+    }
+}
+
+function isValidRange($begin, $end) {
+    if($end < $begin) {
+        return FALSE;
+    } else if($end < 0 || $begin < 0) {
+        return FALSE;
+    } else {
+        return TRUE;
+    }
 }
 
 //</editor-fold>
@@ -230,7 +287,7 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
         return;
     }
     //User associated with token not part of given chat
-    if (!($chat['userOneID'] == $user_id || $chat['userTwoID'] == $user_id)) {
+    if (!($chat['userOneID'] == $user_id || $chat['userTwohID'] == $user_id)) {
         $log['success'] = "false";
         $log['error'] = "no access";
         return;
@@ -308,6 +365,17 @@ function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
 }
 
 //</editor-fold>
+
+function getChatMetaData($chat_id) {
+    $fileLoc = getChatFilePath($chat_id);
+    $chatFile = fopen($fileLoc, 'r');
+    if($chatFile === FALSE) {
+        return FALSE;
+    } 
+    $firstLine = fgets($chatFile);
+    fclose($chatFile);
+    return json_decode($firstLine, TRUE);
+}
 
 function getUserChats(&$log, $user_id) {
     $chat_ids = array();

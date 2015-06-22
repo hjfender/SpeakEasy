@@ -12,9 +12,9 @@ function main() {
     } else {
         $function = $_POST['function'];
         executeFunction($log, $function);
-        echo json_encode($log);
-        exit;
     }
+    echo json_encode($log);
+    exit;
 }
 
 function executeFunction(&$log, $function) {
@@ -24,7 +24,8 @@ function executeFunction(&$log, $function) {
 }
 
 function prepCreateChatByEmails(&$log) {
-    if (count(checkSet(array("emailOne", "emailTwo"))) != 0) {
+    if (count(checkSet(array("emailOne", "emailTwo"), $_POST)) != 0) {
+        error_log("Missing inputs");
         missingInputs($log);
         return;
     }
@@ -48,22 +49,34 @@ function createChatByEmails(&$log, $email_one, $email_two) {
 
         $id_one = $resultsOne->fetch_array()[0];
         $id_two = $resultsTwo->fetch_array()[0];
-        
+
         $query = "SELECT `id` FROM `chats` WHERE (`user_one` = '$id_one' AND `user_two` = '$id_two') OR (`user_one` = '$id_two' AND `user_two` = '$id_one') LIMIT 1";
-        if ($conn->query($query) -> num_rows != 0) {
+        if ($conn->query($query)->num_rows != 0) {
             $log['success'] = "false";
             $log['error'] = "chat already exists";
             return;
         }
-        
+
         $query = "INSERT INTO chats (id,user_one,user_two) VALUES ('$chat_id','$id_one','$id_two')";
         if ($conn->query($query) === TRUE) {
             $log['success'] = "true";
             $log['response'] = "chat created";
             addChatToUserFile($id_one, $chat_id);
             addChatToUserFile($id_two, $chat_id);
-
-            fwrite(fopen(getChatFilePath($chat_id),'a'), $email_one . " " . $email_two);
+            
+            $chatMetaData = array();
+            $chatMetaData['chatID'] = $chat_id;
+            $chatMetaData['userOne'] = $id_one;
+            $chatMetaData['userOneName'] = $email_one;
+            $chatMetaData['userTwo'] = $id_two;
+            $chatMetaData['userTwoName'] = $email_two;
+            $chatMetaData['count'] = 0;
+            $chatFile = fopen(getChatFilePath($chat_id),'w');
+            if($chatFile === FALSE){
+                error_log("ERROR");
+            }
+            //With a buffer to avoid overriding next line in the future. 
+            fwrite($chatFile, json_encode($chatMetaData) . "      ");
         } else {
             $log['success'] = "false";
             $log['error'] = "unable to create chat";

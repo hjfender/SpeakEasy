@@ -29,12 +29,12 @@ function generateUUID() {
  * @return \mysqli connections
  */
 function connectToDatabase($database = "speakeasy") {
-    $serverfirst = "localhost";
-    $userfirst = "root";
+    $serverip = "localhost";
+    $username = "root";
     $password = "";
 
     // Create connection
-    $conn = new mysqli($serverfirst, $userfirst, $password, $database);
+    $conn = new mysqli($serverip, $username, $password, $database);
     // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -83,10 +83,10 @@ function addChatToUserFile($user_id, $chat_id) {
  * @param array $toCheck The Array to check set
  * @return array Of unset variables
  */
-function checkSet($toCheck) {
+function checkSet($toCheck,&$array) {
     $unchecked = array();
     foreach ($toCheck as $value) {
-        if (!isset($_POST, $value)) {
+        if (!isset($array, $value))  {
             array_push($unchecked, $value);
         }
     }

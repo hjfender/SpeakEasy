@@ -1,8 +1,7 @@
 <?php
 
 include "utils.php";
-
-main();
+error_reporting(E_ALL & ~E_NOTICE);
 
 // <editor-fold defaultstate="collapsed" desc="Main Code">
 /**
@@ -14,7 +13,8 @@ function main() {
     if (!isset($_POST['token'])) {
         $log['success'] = "false";
         $log['error'] = "no authentication token given";
-        error_log("Unable to Authenticate2");
+        error_log("Unable to Authenticate ~ No token given");
+        ;
     } else if (!isset($_POST['function'])) {
         $log['success'] = "false";
         $log['error'] = "no function given";
@@ -46,12 +46,12 @@ function authenticate($token, &$log) {
     $conn = connectToDatabase();
     $results = $conn->query($query);
     if ($results->num_rows === 0) {
-        error_log("Unable to Authenticate2" . $token);
+        error_log("Unable to Authenticate ~ unable to find token " . $token);
         return FALSE;
     } else {
         $array = $results->fetch_array();
         $updated = new DateTime($array[1]);
-        $updated->add(new DateInterval("PT15M"));        
+        $updated->add(new DateInterval("PT15M"));
         $now = new DateTime();
         if ($now > $updated) {
             //Handle timeout
@@ -80,8 +80,8 @@ function executeFunction($command, $user_id, &$log) {
         $log['error'] = "invalid function";
     }
 }
-//</editor-fold>
 
+//</editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Executable Functions">
 // <editor-fold defaultstate="collapsed" desc="Create Chat From IDs">
 /**
@@ -89,7 +89,7 @@ function executeFunction($command, $user_id, &$log) {
  * @param type $log Log for Javascript response
  */
 function prepCreateChat(&$log) {
-    if (count(checkSet(array("idOne", "idTwo"))) == 0) {
+    if (count(checkSet(array("idOne", "idTwo"), $_POST)) != 0) {
         missingInputs($log);
         return;
     }
@@ -125,7 +125,8 @@ function createChat(&$log, $user_id_one, $user_id_two) {
     if ($conn->query($insertQuery)) {
         $log['success'] = "true";
         $log['response'] = "chat created";
-        fwrite(fopen("chats/" . $uuid . ".txt", 'a'), $emailOne . " " . $emailTwo);
+        $chatMetaData = "{chatid:'" . $uuid . "', userOneID:'" . $user_id_one . "', userOneName:'user one', userTwoID:'" . $user_id_two + "', userTwoName:'user two', count:0}";
+        fwrite(fopen("chats/" . $uuid . ".txt", 'a'), $chatMetaData);
         addChatToUserFile($user_id_one, $uuid);
         addChatToUserFile($user_id_two, $uuid);
         return TRUE;
@@ -134,11 +135,6 @@ function createChat(&$log, $user_id_one, $user_id_two) {
         $log['error'] = "unknown creation error";
         return FALSE;
     }
-}
-
-function addChatToUserFile($user_id, $chat_id) {
-    $fileLoc = getUserChatsFilePath($user_id);
-    fwrite(fopen($fileLoc, 'a'), $chat_id . "\n");
 }
 
 //</editor-fold>
@@ -150,7 +146,7 @@ function addChatToUserFile($user_id, $chat_id) {
  * @param string $user_id ID of authenticated user
  */
 function prepSendMessage(&$log, $user_id) {
-    if (count(checkSet(array("message", "chatID"))) == 0) {
+    if (count(checkSet(array("message", "chatID"), $_POST)) != 0) {
         $log['success'] = "false";
         $log['error'] = "missing inputs";
         return;
@@ -161,27 +157,158 @@ function prepSendMessage(&$log, $user_id) {
 }
 
 function sendMessage(&$log, $user_id, $chat_id, $message) {
-    $chat = getChatByID($chat_id);
+    $chatInfo = getChatByID($chat_id);
+    //No chat by given ID
+    if ($chatInfo === FALSE) {
+        $log['success'] = "false";
+        $log['error'] = "invalid chat id";
+        return;
+    }
+    //User not part of given chat ID
+    if (!($chatInfo['userOneID'] == $user_id || $chatInfo['userTwoID'] == $user_id)) {
+        $log['success'] = "false";
+        $log['error'] = "no access";
+        return;
+    }
+    $chatFilePath = getChatFilePath($chat_id);
+
+    //Update chat meta data
+    $count = incrementChatCount($chatFilePath);
+
+    //Add Message to file
+    $now = date("Y-m-d H:i:s");
+    $messageData = array();
+    $messageData['index'] = $count - 1;
+    $messageData['sender'] = $user_id;
+    $messageData['sent'] = $now;
+    $messageData['message'] = $message;
+    $chat = fopen($chatFilePath, 'a');
+    fwrite($chat, json_encode($messageData) . "\n");
+    fclose($chat);
+
+    //Response
+    $log['success'] = "true";
+    $log['response'] = "message sent";
+}
+
+/**
+ * Updates the count variable of the chat metadata. 
+ * @param String $chatFilePath File path of the chat to increment. 
+ */
+function incrementChatCount($chatFilePath, $amount = 1) {
+    //Get Chat Data
+    $chat = fopen($chatFilePath, 'r');
+    $firstLine = fgets($chat);
+    $chatData = json_decode($firstLine, TRUE);
+    fclose($chat);
+
+    //Increment count
+    $chatData['count'] = $chatData['count'] + $amount;
+
+
+    //Write data to first line
+    $chat = fopen($chatFilePath, 'r+');
+    fwrite($chat, json_encode($chatData));
+    fclose($chat);
+    return $chatData['count'];
+}
+
+//</editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Retrieve Range of Messages">
+function prepRetrieveMessageRange(&$log, $user_id) {
+    if (count(checkset(array("chatID", "begin", "end"), $_POST)) != 0) {
+        missingInputs($log);
+        return;
+    }
+    $chat_id = $_POST['chatID'];
+    $begin = $_POST['begin'];
+    $end = $_POST['end'];
+    retrieveMessageRange($log, $user_id, $chat_id, $begin, $end);
+}
+
+function retrieveMessageRange(&$log, $user_id, $chat_id, $begin, $end) {
+    if (!isValidRange($begin, $end)) {
+        $log['success'] = "false";
+        $log['error'] = "invalid range";
+        return;
+    }
+    $chat = getChatById($chat_id);
+    //Unable to find chat with given ID
     if ($chat === FALSE) {
         $log['success'] = "false";
         $log['error'] = "invalid chat id";
         return;
     }
-    if (!($chat['userOne'] == $user_id || $chat['userTwo'] == $user_id)) {
+    //User assoiated with token not part of given chat
+    if (!($chat['userOneID'] == $user_id || $chat['userTwohID'] == $user_id)) {
         $log['success'] = "false";
         $log['error'] = "no access";
         return;
     }
-    $fileName = $chat['fileName'];
-    fwrite(fopen("chats/" . $fileName . ".txt", 'a'), "<span>" . $chat_id . ": </span>" . (str_replace("\n", " ", $message)) . "\n");
     $log['success'] = "true";
-    $log['response'] = "message sent";
+
+    $fileLoc = getChatFilePath($chat_id);
+    $chatMetaData = getChatMetaData($chat_id);
+    $count = $chatMetaData['count'];
+    if ($begin > $count) {
+        $log['response'] = "too few messages";
+        $log['messages'] = "false";
+        return;
+    }
+    if ($end > $count) {
+        $end = $count;
+    }
+
+    $names = getNamesFromChatMetaData($chatMetaData);
+    $chatFile = fopen($fileLoc, "r");
+    $messages = array();
+    fgets($chatFile); //Skip metadata
+    $line_num = 0;
+    while (($line = fgets($chatFile) !== FALSE)) {
+        if ($line_num >= $begin && $line_num <= $end) {
+            $messageArray = json_decode($line, TRUE);
+            $messageArray['sender'] = $names[$messageArray['sender']]; //Replace id with name in chat
+            $messages[] = json_encode($messageArray);
+        }
+        $line_num = $line_num + 1;
+    }
+
+    $log['messages'] = $messages;
+    $log['response'] = "retrieved messages";
+}
+
+/**
+ * True ifthe range is valid and not less than zero
+ * @param type $begin begining of range
+ * @param type $end End of range
+ * @return boolean 
+ */
+function isValidRange($begin, $end) {
+    if ($end < $begin) {
+        return FALSE;
+    } else if ($end < 0 || $begin < 0) {
+        return FALSE;
+    } else {
+        return TRUE;
+    }
+}
+
+/**
+ * Gets names for the users in the chat in an associative array
+ * @param Array $chatMetaData MetaData for a chat
+ * @return Array Associative array with userID matched with name in chat
+ */
+function getNamesFromChatMetaData($chatMetaData) {
+    $names = array();
+    $names[$chatMetaData['userOne']] = $chatMetaData['userOneName'];
+    $names[$chatMetaData['userTwo']] = $chatMetaData['userTwoName'];
+    return $names;
 }
 
 //</editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Retrieve New Messages">
 function prepRetrieveNewMessages(&$log, $user_id) {
-    if (count(checkSet(array("chatID", "state"))) != 0) {
+    if (count(checkSet(array("chatID", "state"), $_POST)) != 0) {
         $log['success'] = "false";
         $log['error'] = "missing inputs";
         return;
@@ -193,45 +320,62 @@ function prepRetrieveNewMessages(&$log, $user_id) {
 
 function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
     $chat = getChatByID($chat_id);
+    //Unable to find chat with given ID
     if ($chat === FALSE) {
         $log['success'] = "false";
         $log['error'] = "invalid chat id";
         return;
     }
-    if (!($chat['userOneID'] == $user_id) || $chat['userTwoID'] == $user_id) {
+    //User associated with token not part of given chat
+    if (!($chat['userOneID'] == $user_id || $chat['userTwohID'] == $user_id)) {
         $log['success'] = "false";
         $log['error'] = "no access";
         return;
     }
-    $fileLoc = getFileLocation($chat['fileName']);
+    $fileLoc = getChatFilePath($chat_id);
     $seconds = 0;
     while ($seconds < 28) {
-        $lines = file($fileLoc);
-        $count = count($lines);
+        //Get the metadata to know how many messages snet
+        $chatFile = fopen($fileLoc, 'r');
+        $chatData = json_decode(fgets($chatFile), TRUE); //Decode chat metadata
+        $count = $chatData['count'];
+
+        //If true, new message sent since sent query
         if ($state < $count) {
             $log['success'] = "true";
-            $text = array();
-            foreach ($lines as $line_num => $line) {
-                if ($line_num >= $state) {
-                    $text[] = $line = str_replace("\n", "", $line);
+
+            $names = array();
+            $names[$chatData['userOne']] = $chatData['userOneName'];
+            $names[$chatData['userTwo']] = $chatData['userTwoName'];
+
+            $messages = array();
+            $line_num = 1;
+            //Get only but all new messages
+            while (($line = fgets($chatFile)) !== FALSE) {
+                if ($line_num > $state) {
+                    $messageData = json_decode($line, TRUE);
+                    $messageData['sender'] = $names[$messageData['sender']];
+                    $messages[] = json_encode($messageData);
                 }
+                $line_num = $line_num + 1;
             }
             $log['state'] = $count;
-            $log['text'] = $text;
+            $log['messages'] = $messages;
             return;
         }
+        fclose($chatFile);
         sleep(1);
         $seconds = $seconds + 1;
     }
     $log['state'] = $state;
-    $log['text'] = "false";
+    $log['messages'] = "false";
     $log['success'] = "true";
 }
 
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Get Last N Messages">
 function prepRetrieveLastNMessages(&$log, $user_id) {
-    if (count(checkSet(array("chatID", "numMessages"))) != 0) {
+    if (count(checkSet(array("chatID", "numMessages"), $_POST)) != 0) {
         missingInputs($log);
         return;
     }
@@ -239,36 +383,56 @@ function prepRetrieveLastNMessages(&$log, $user_id) {
     $chat_id = $_POST['chatID'];
     $num_messages = $_POST['numMessages'];
 
-    if (!userHasAccessToChat($user_id, $chat_id)) {
+   /* if (!userHasAccessToChat($user_id, $chat_id)) {
         $log['success'] = "false";
         $log['error'] = "no access";
         return;
-    }
+    } */
     retrieveLastNMessages($log, $chat_id, $num_messages);
 }
 
 function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
+    $chatData = getChatMetaData($chat_id);
     $fileName = getChatFilePath($chat_id);
-    $chat = open($fileName);
-    $start = count($chat) - $num_messages;
-    $text = array();
-    foreach ($chat as $line_num => $line) {
+
+    $names = getNamesFromChatMetaData($chatData);
+    $start = $chatData['count'] - $num_messages;
+    $messages = array();
+
+    $chatFile = fopen($fileName, "r");
+    fgets($chatFile); //Skip Metadata
+    $line_num = 0;
+    while (($line = fgets($chatFile)) !== FALSE) {
         if ($line_num >= $start) {
-            $text[] = $line = str_replace("\n", "", $line);
+            $messageData = json_decode($line, TRUE);
+            $messageData['sender'] = $names[$messageData['sender']];
+            $messages[] = json_encode($messageData);
         }
+        $line_num = $line_num + 1;
     }
-    $log['text'] = $text;
+    $log['messages'] = $messages;
     $log['success'] = "true";
 }
 
 //</editor-fold>
 
+function getChatMetaData($chat_id) {
+    $fileLoc = getChatFilePath($chat_id);
+    $chatFile = fopen($fileLoc, 'r');
+    if ($chatFile === FALSE) {
+        return FALSE;
+    }
+    $firstLine = fgets($chatFile);
+    fclose($chatFile);
+    return json_decode($firstLine, TRUE);
+}
+
 function getUserChats(&$log, $user_id) {
     $chat_ids = array();
-    $fileLoc = "userchats/" . $user_id . ".chats";
+    $fileLoc = getUserChatsFilePath($user_id);
     $file = file($fileLoc);
     foreach ($file as $line_num => $line) {
-        $chat_ids[] = $line = str_replace("\n", "", $line);
+        $chat_ids[] = $line = str_replace("\r", "", str_replace("\n", "", $line));
     }
     $log['chatIDs'] = $chat_ids;
     $log['success'] = "true";
@@ -276,11 +440,10 @@ function getUserChats(&$log, $user_id) {
 }
 
 //</editor-fold>
-
 // <editor-fold defaultstate="collapsed" desc="Misc Utility Functions">
 function userHasAccessToChat($user_id, $chat_id) {
     $chatFileName = getUserChatsFilePath($user_id);
-    $chatFile = openf($chatFileName, 'r');
+    $chatFile = fopen($chatFileName, 'r');
     while (feof($chatFile)) {
         $line = str_replace("\n", "", fgets($chatFile));
         if ($line === $chat_id) {
@@ -307,15 +470,18 @@ function getChatByID($chat_id) {
     $chat['chatID'] = $results_array[0];
     $chat['userOneID'] = $results_array[1];
     $chat['userTwoID'] = $results_array[2];
-    $chat['fileName'] = $results_array[3];
     return $chat;
 }
 
-// </editor-fold>
+function missingInputs(&$log) {
+    $log['success'] = "false";
+    $log['error'] = "missing inputs";
+}
 
+// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Old Code">
 function connectToChat(&$log) {
-    if (count(checkSet(array("emailOne", "emailTwo"))) != 0) {
+    if (count(checkSet(array("emailOne", "emailTwo"), $_POST)) != 0) {
         missingInputs($log);
         return;
     }
@@ -336,8 +502,6 @@ function connectToChat(&$log) {
         $log['error'] = "profiles not found";
     }
 }
-
-
 
 function validUserID($id) {
     $conn = connectToDatabase("speakeasy");
@@ -388,14 +552,6 @@ function getFileName($idOne, $idTwo) {
     return $results;
 }
 
-function missingInputs(&$log) {
-    $log['success'] = "false";
-    $log['error'] = "missing inputs";
-}
-
-function getFileLocation($fileName) {
-    return "chats/" . $fileName . ".txt";
-}
-
 // </editor-fold>
-?>
+
+main();

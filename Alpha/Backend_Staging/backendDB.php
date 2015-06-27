@@ -73,6 +73,8 @@ function executeFunction($command, $user_id, &$log) {
         getUserChats($log, $user_id);
     } else if ($command == 'chat:retrieve:new') {
         prepRetrieveNewMessages($log, $user_id);
+    } else if ($command == 'profile:info:all'){
+        getProfileInformation($log, $user_id);  
     } else {
         $log['success'] = "false";
         $log['error'] = "invalid function";
@@ -439,6 +441,29 @@ function getUserChats(&$log, $user_id) {
     $log['response'] = "retrieved chat ids";
 }
 // </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Get Profile Information">
+function getProfileInformation(&$log, $user_id) {
+    $query = "SELECT `first_name`, `last_name`, `email` WHERE `id` = '$user_id' LIMIT 1";
+    $conn = connectToDatabase();
+    $results = $conn->query($query);
+    $conn->close();
+    
+    if($results === FALSE) {
+        $log['success'] = "false";
+        $log['error'] = "unknown query error";;
+    } else if($results->num_rows() === 0) {
+        $log['success'] = "false";
+        $log['error'] = "user id not found";
+    } else {
+        $profile = $results->fetch_assoc();
+        $log['firstName'] = $profile['first_name'];
+        $log['lastName'] = $profile['last_name'];
+        $log['email'] = $profile['email'];
+        $log['success'] = "true";
+        $log['response'] = "found user info";
+    }
+}
+//</editor-fold>
 
 /**
  * Retrieves the chat data for the given id. See backend notes for more info

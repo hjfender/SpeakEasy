@@ -417,23 +417,7 @@ function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
 }
 
 //</editor-fold>
-
-/**
- * Retrieves the chat data for the given id. See backend notes for more info
- * @param string $chat_id UUID of the chat
- * @return multiple Associative array of chat data or FALSE if no chat
- */
-function getChatMetaData($chat_id) {
-    $fileLoc = getChatFilePath($chat_id);
-    $chatFile = fopen($fileLoc, 'r');
-    if ($chatFile === FALSE) {
-        return FALSE;
-    }
-    $firstLine = fgets($chatFile);
-    fclose($chatFile);
-    return json_decode($firstLine, TRUE);
-}
-
+// <editor-fold defaultstate="collapsed" desc="Get user chats">
 /**
  * Gets a list of the chats a user is a part of 
  * @param type $log 
@@ -449,6 +433,23 @@ function getUserChats(&$log, $user_id) {
     $log['chatIDs'] = $chat_ids;
     $log['success'] = "true";
     $log['response'] = "retrieved chat ids";
+}
+// </editor-fold>
+
+/**
+ * Retrieves the chat data for the given id. See backend notes for more info
+ * @param string $chat_id UUID of the chat
+ * @return multiple Associative array of chat data or FALSE if no chat
+ */
+function getChatMetaData($chat_id) {
+    $fileLoc = getChatFilePath($chat_id);
+    $chatFile = fopen($fileLoc, 'r');
+    if ($chatFile === FALSE) {
+        return FALSE;
+    }
+    $firstLine = fgets($chatFile);
+    fclose($chatFile);
+    return json_decode($firstLine, TRUE);
 }
 
 //</editor-fold>

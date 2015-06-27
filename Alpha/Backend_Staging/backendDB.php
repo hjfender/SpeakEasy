@@ -13,8 +13,6 @@ function main() {
     if (!isset($_POST['token'])) {
         $log['success'] = "false";
         $log['error'] = "no authentication token given";
-        error_log("Unable to Authenticate ~ No token given");
-        ;
     } else if (!isset($_POST['function'])) {
         $log['success'] = "false";
         $log['error'] = "no function given";
@@ -420,6 +418,11 @@ function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
 
 //</editor-fold>
 
+/**
+ * Retrieves the chat data for the given id. See backend notes for more info
+ * @param string $chat_id UUID of the chat
+ * @return multiple Associative array of chat data or FALSE if no chat
+ */
 function getChatMetaData($chat_id) {
     $fileLoc = getChatFilePath($chat_id);
     $chatFile = fopen($fileLoc, 'r');
@@ -431,6 +434,11 @@ function getChatMetaData($chat_id) {
     return json_decode($firstLine, TRUE);
 }
 
+/**
+ * Gets a list of the chats a user is a part of 
+ * @param type $log 
+ * @param type $user_id UUID of the user
+ */
 function getUserChats(&$log, $user_id) {
     $chat_ids = array();
     $fileLoc = getUserChatsFilePath($user_id);

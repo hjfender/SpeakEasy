@@ -67,13 +67,13 @@ function authenticate($token, &$log) {
  * @param type $log Array for response to javascript
  */
 function executeFunction($command, $user_id, &$log) {
-    if ($command == 'send message') {
+    if ($command == 'chat:send:message') {
         prepSendMessage($log, $user_id);
-    } else if ($command == 'last n messages') {
+    } else if ($command == 'chat:retrieve:last') {
         prepRetrieveLastNMessages($log, $user_id);
-    } else if ($command == 'retrive chat ids') {
+    } else if ($command == 'profile:chats:list') {
         getUserChats($log, $user_id);
-    } else if ($command == 'new messages') {
+    } else if ($command == 'chat:retrieve:new') {
         prepRetrieveNewMessages($log, $user_id);
     } else {
         $log['success'] = "false";
@@ -189,7 +189,9 @@ function sendMessage(&$log, $user_id, $chat_id, $message) {
     //Response
     $log['success'] = "true";
     $log['response'] = "message sent";
-}
+    $log['index'] = $messageData['index'];
+    
+    }
 
 /**
  * Updates the count variable of the chat metadata. 
@@ -240,7 +242,7 @@ function retrieveMessageRange(&$log, $user_id, $chat_id, $begin, $end) {
         return;
     }
     //User assoiated with token not part of given chat
-    if (!($chat['userOneID'] == $user_id || $chat['userTwohID'] == $user_id)) {
+    if (!($chat['userOneID'] == $user_id || $chat['userTwoID'] == $user_id)) {
         $log['success'] = "false";
         $log['error'] = "no access";
         return;
@@ -327,11 +329,12 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
         return;
     }
     //User associated with token not part of given chat
-    if (!($chat['userOneID'] == $user_id || $chat['userTwohID'] == $user_id)) {
+    if (!($chat['userOneID'] == $user_id || $chat['userTwoID'] == $user_id)) {
         $log['success'] = "false";
         $log['error'] = "no access";
         return;
     }
+    $log['success'] = "true";
     $fileLoc = getChatFilePath($chat_id);
     $seconds = 0;
     while ($seconds < 28) {
@@ -342,8 +345,7 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
 
         //If true, new message sent since sent query
         if ($state < $count) {
-            $log['success'] = "true";
-
+            
             $names = array();
             $names[$chatData['userOne']] = $chatData['userOneName'];
             $names[$chatData['userTwo']] = $chatData['userTwoName'];
@@ -359,6 +361,7 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
                 }
                 $line_num = $line_num + 1;
             }
+            $log['response'] = "new messages found";
             $log['state'] = $count;
             $log['messages'] = $messages;
             return;
@@ -368,8 +371,8 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
         $seconds = $seconds + 1;
     }
     $log['state'] = $state;
+    $log['response'] = "no new messgaes";
     $log['messages'] = "false";
-    $log['success'] = "true";
 }
 
 // </editor-fold>
@@ -410,6 +413,7 @@ function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
         }
         $line_num = $line_num + 1;
     }
+    $log['response'] = "able to retrieve messages";
     $log['messages'] = $messages;
     $log['success'] = "true";
 }

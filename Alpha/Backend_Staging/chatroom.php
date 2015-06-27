@@ -6,12 +6,14 @@
             function init() {
                 console.log("init");
                 passToken(<?php echo '"' . $_POST['token'] . '"'; ?>);
+                prepGetProfileInformation();
                 getChatIDs();
             }
             window.onload = init;
         </script>
     </head>
     <body>
+        <div> <div id="firstNameInfo">First Name</div> <div id="lastNameInfo">Last Name</div> <div id="emailInfo">Email Info</div></div>
         <div id="chat-ids-area"> </div>
         <div><form action="javascript:prepCreateChat()">
                 <div>

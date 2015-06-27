@@ -29,7 +29,7 @@ function getChatIDs() {
         url: "backendDB.php",
         data: {
             'token': token,
-            'function': 'retrive chat ids'
+            'function': 'profile:info:chats'
         },
         dataType: "json",
         success: getChatIDsSuccess
@@ -207,7 +207,7 @@ function getProfileInformation() {
         type: "POST",
         url: "backendDB.php",
         data: {
-            'function': 'profile:info:all',
+            'function': 'profile:info:personal',
             'token': token,
         },
         dataType: "json",

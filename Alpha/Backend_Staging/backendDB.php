@@ -69,11 +69,11 @@ function executeFunction($command, $user_id, &$log) {
         prepSendMessage($log, $user_id);
     } else if ($command == 'chat:retrieve:last') {
         prepRetrieveLastNMessages($log, $user_id);
-    } else if ($command == 'profile:chats:list') {
+    } else if ($command == 'profile:info:chats') {
         getUserChats($log, $user_id);
     } else if ($command == 'chat:retrieve:new') {
         prepRetrieveNewMessages($log, $user_id);
-    } else if ($command == 'profile:info:all'){
+    } else if ($command == 'profile:info:personal'){
         getProfileInformation($log, $user_id);  
     } else {
         $log['success'] = "false";

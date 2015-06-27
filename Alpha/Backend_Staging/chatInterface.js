@@ -208,7 +208,7 @@ function getProfileInformation() {
         url: "backendDB.php",
         data: {
             'function': 'profile:info:personal',
-            'token': token,
+            'token': token
         },
         dataType: "json",
         success: getProfileInformationSuccess

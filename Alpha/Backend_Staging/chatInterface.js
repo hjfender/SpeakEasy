@@ -196,6 +196,36 @@ function getInitialMessagesSuccess(json) {
 }
 //</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="Profile Information">
+function prepGetProfileInformation() {
+    console.log("Getting profile info");
+    getProfileInformation();
+}
+
+function getProfileInformation() {
+    $.ajax({
+        type: "POST",
+        url: "backendDB.php",
+        data: {
+            'function': 'profile:info:all',
+            'token': token,
+        },
+        dataType: "json",
+        success: getProfileInformationSuccess
+    });
+}
+
+function getProfileInformationSuccess(json) {
+    console.log(json);
+    var data = convertToObject(json);
+    
+    if(data.success === "true") {
+        document.getElementById("firstNameInfo").innerHTML = data.firstName;
+        document.getElementById("lastNameInfo").innerHTML = data.lastName;
+        document.getElementById("emailInfo").innerHTML = data.email;
+    }
+}
+//</editor-fold>
 //</editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Sudo Functions">

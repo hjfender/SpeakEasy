@@ -76,7 +76,7 @@ function sendMessage(chatID, message) {
     $.ajax({
         type: "POST",
         url: "backendDB.php",
-        data: {'function': 'send message',
+        data: {'function': 'chat:send:message',
             'token': token,
             'chatID': chatID,
             'message': message
@@ -120,7 +120,7 @@ function updateChat(chatID, state) {
         type: "POST",
         url: "backendDB.php",
         data: {
-            'function': 'new messages',
+            'function': 'chat:retrieve:new',
             'token': token,
             'state': state,
             'chatID': chatID
@@ -158,7 +158,7 @@ function updateChatSuccess(json) {
 
 // <editor-fold defaultstate="collapsed" desc="Get initial messages">
 function prepGetInitialMessages() {
-    console.log("getting initial messages");
+    console.log("Getting initial messages");
     getInitialMessages(selectedChatID, 15);
 }
 
@@ -167,7 +167,7 @@ function getInitialMessages(chatID, numMessages) {
         type: "POST",
         url: "backendDB.php",
         data: {
-            'function': 'last n messages',
+            'function': 'chat:retrieve:last',
             'token': token,
             'numMessages': numMessages,
             'chatID': chatID

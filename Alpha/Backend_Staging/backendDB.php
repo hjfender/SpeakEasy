@@ -417,7 +417,7 @@ function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
 }
 
 //</editor-fold>
-// <editor-fold defaultstate="collapsed" desc="Get user chats">
+// <editor-fold defaultstate="collapsed" desc="Get User Chats">
 /**
  * Gets a list of the chats a user is a part of 
  * @param type $log 
@@ -425,11 +425,15 @@ function retrieveLastNMessages(&$log, $chat_id, $num_messages) {
  */
 function getUserChats(&$log, $user_id) {
     $chat_ids = array();
-    $fileLoc = getUserChatsFilePath($user_id);
-    $file = file($fileLoc);
-    foreach ($file as $line_num => $line) {
-        $chat_ids[] = $line = str_replace("\r", "", str_replace("\n", "", $line));
+    $query = "SELECT `id` FROM `chats` WHERE `user_one` = '$user_id' OR `user_two` = '$user_id'";
+    $conn = connectToDatabase();
+    $results = $conn->query($query);
+    $conn->close();
+    
+    while($row = $results->fetch_assoc()) {
+        $chat_ids[] = $row['id'];
     }
+    
     $log['chatIDs'] = $chat_ids;
     $log['success'] = "true";
     $log['response'] = "retrieved chat ids";

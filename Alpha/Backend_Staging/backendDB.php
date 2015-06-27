@@ -442,16 +442,21 @@ function getUserChats(&$log, $user_id) {
 }
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Get Profile Information">
+/**
+ * Gets the personal information about the user: First, Last, Email
+ * @param type $log Log for response
+ * @param type $user_id UUID of the user
+ */
 function getProfileInformation(&$log, $user_id) {
-    $query = "SELECT `first_name`, `last_name`, `email` WHERE `id` = '$user_id' LIMIT 1";
+    $query = "SELECT `first_name`, `last_name`, `email` FROM `profiles` WHERE `id` = '$user_id' LIMIT 1";
     $conn = connectToDatabase();
     $results = $conn->query($query);
     $conn->close();
     
     if($results === FALSE) {
         $log['success'] = "false";
-        $log['error'] = "unknown query error";;
-    } else if($results->num_rows() === 0) {
+        $log['error'] = "unknown query error";
+    } else if($results->num_rows === 0) {
         $log['success'] = "false";
         $log['error'] = "user id not found";
     } else {

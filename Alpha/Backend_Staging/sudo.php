@@ -45,7 +45,7 @@ function matchUsersForChat(&$log, $topic_id, $user_id){
 	if($result->num_rows > 0){
 		$match_id = $result->fetch_array()[0];
 		//Given we develop some kind of algorithm, we could add that code here to be more choosy, rather than just choosing the first match
-		createChatByIDs($log, $user_id, $match_id);
+		createChatByIDs($log, $user_id, $match_id, $topic_id);
 	}
 	else{
 		$queue_query = "INSERT INTO 'speakeasy' VALUES(".$topic_id.", ".$user_id.")";
@@ -59,18 +59,18 @@ function matchUsersForChat(&$log, $topic_id, $user_id){
 
 //Written by Ben
 //testing function for matchUsersForChat so I don't have to convert ids to emails just to convert back. Written by Ben
-function createChatByIDs(&$log, $id_one, $id_two){
+function createChatByIDs(&$log, $id_one, $id_two, $topic_id){
 		$conn = connectToDatabase();
         $chat_id = generateUUID();
 
-        $query = "SELECT `id` FROM `chats` WHERE (`user_one` = '$id_one' AND `user_two` = '$id_two') OR (`user_one` = '$id_two' AND `user_two` = '$id_one') LIMIT 1";
+        $query = "SELECT `chat_id` FROM `chats` WHERE (`user_one` = '$id_one' AND `user_two` = '$id_two') OR (`user_one` = '$id_two' AND `user_two` = '$id_one') LIMIT 1";
         if ($conn->query($query)->num_rows != 0) {
             $log['success'] = "false";
             $log['error'] = "chat already exists";
             return;
         }
 
-        $query = "INSERT INTO chats (id,user_one,user_two) VALUES ('$chat_id','$id_one','$id_two')";
+        $query = "INSERT INTO chats (chat_id,user_one,user_two,topic_id) VALUES ('$chat_id','$id_one','$id_two','$topic_id')";
         if ($conn->query($query) === TRUE) {
             $log['success'] = "true";
             $log['response'] = "chat created";
@@ -79,6 +79,7 @@ function createChatByIDs(&$log, $id_one, $id_two){
             
             $chatMetaData = array();
             $chatMetaData['chatID'] = $chat_id;
+			$chatMetaData['topicID'] = $topic_id;
             $chatMetaData['userOne'] = $id_one;
             $chatMetaData['userOneName'] = $email_one;
             $chatMetaData['userTwo'] = $id_two;
@@ -96,7 +97,7 @@ function createChatByIDs(&$log, $id_one, $id_two){
         } 
 }
 
-function createChatByEmails(&$log, $email_one, $email_two) {
+function createChatByEmails(&$log, $email_one, $email_two, $topic_id) {
     $queryOne = "SELECT `id` FROM `profiles` WHERE `email` LIKE '$email_one'";
     $queryTwo = "SELECT `id` FROM `profiles` WHERE `email` LIKE '$email_two'";
 
@@ -111,14 +112,15 @@ function createChatByEmails(&$log, $email_one, $email_two) {
         $id_one = $resultsOne->fetch_array()[0];
         $id_two = $resultsTwo->fetch_array()[0];
 
-        $query = "SELECT `id` FROM `chats` WHERE (`user_one` = '$id_one' AND `user_two` = '$id_two') OR (`user_one` = '$id_two' AND `user_two` = '$id_one') LIMIT 1";
+		//Ben added 'AND `topic_id`... to allow users to have multiple chats of different topics. Also change id to chat_id where appropriate
+        $query = "SELECT `chat_id` FROM `chats` WHERE (`user_one` = '$id_one' AND `user_two` = '$id_two' AND `topic_id` = '$topic_id') OR (`user_one` = '$id_two' AND `user_two` = '$id_one' AND `topic_id` = '$topic_id') LIMIT 1";
         if ($conn->query($query)->num_rows != 0) {
             $log['success'] = "false";
             $log['error'] = "chat already exists";
             return;
         }
 
-        $query = "INSERT INTO chats (id,user_one,user_two) VALUES ('$chat_id','$id_one','$id_two')";
+        $query = "INSERT INTO chats (chat_id,user_one,user_two,topic_id) VALUES ('$chat_id','$id_one','$id_two','$topic_id')";//Ben added topic_id to account for DB structure
         if ($conn->query($query) === TRUE) {
             $log['success'] = "true";
             $log['response'] = "chat created";
@@ -127,6 +129,7 @@ function createChatByEmails(&$log, $email_one, $email_two) {
             
             $chatMetaData = array();
             $chatMetaData['chatID'] = $chat_id;
+			$chatMetaData['topicID'] = $topic_id; //Added by Ben to account for latest DB structure
             $chatMetaData['userOne'] = $id_one;
             $chatMetaData['userOneName'] = $email_one;
             $chatMetaData['userTwo'] = $id_two;

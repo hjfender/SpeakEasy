@@ -1,0 +1,21 @@
+img {
+	width: 150px;
+	height: 150px;
+	margin-left: 70px;
+}
+
+.jcarousel-wrapper {
+	width: 70%;
+}
+
+.space {
+    height: 40px;
+}
+
+.jcarousel-control-next {
+  right: -50px;
+}
+
+.jcarousel-control-prev {
+  left: -50px;
+}

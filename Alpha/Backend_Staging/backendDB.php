@@ -75,6 +75,8 @@ function executeFunction($command, $user_id, &$log) {
         prepRetrieveNewMessages($log, $user_id);
     } else if ($command == 'profile:info:personal') {
         getProfileInformation($log, $user_id);
+    } else if ($command == 'chat:info:one') {
+        prepGetChatInformation($log, $user_id);
     } else {
         $log['success'] = "false";
         $log['error'] = "invalid function";
@@ -472,7 +474,7 @@ function getProfileInformation(&$log, $user_id) {
 //</editor-fold>
 //<editor-fold defaultstate="collpased" desc="Get chat information">
 function prepGetChatInformation(&$log, $user_id) {
-    if(checkSet(array("chatID")) != 0) {
+    if (checkSet(array("chatID")) != 0) {
         missingInputs($log);
         return;
     }
@@ -512,8 +514,6 @@ function getChatInformation(&$log, $chat_id, $user_id) {
     $log['success'] = TRUE;
     $log['response'] = "retrieved chat data";
 }
-
-
 
 //</editor-fold>
 /**

@@ -73,8 +73,8 @@ function executeFunction($command, $user_id, &$log) {
         getUserChats($log, $user_id);
     } else if ($command == 'chat:retrieve:new') {
         prepRetrieveNewMessages($log, $user_id);
-    } else if ($command == 'profile:info:personal'){
-        getProfileInformation($log, $user_id);  
+    } else if ($command == 'profile:info:personal') {
+        getProfileInformation($log, $user_id);
     } else {
         $log['success'] = "false";
         $log['error'] = "invalid function";
@@ -190,8 +190,7 @@ function sendMessage(&$log, $user_id, $chat_id, $message) {
     $log['success'] = "true";
     $log['response'] = "message sent";
     $log['index'] = $messageData['index'];
-    
-    }
+}
 
 /**
  * Updates the count variable of the chat metadata. 
@@ -345,7 +344,7 @@ function retrieveNewMessages(&$log, $user_id, $chat_id, $state) {
 
         //If true, new message sent since sent query
         if ($state < $count) {
-            
+
             $names = array();
             $names[$chatData['userOne']] = $chatData['userOneName'];
             $names[$chatData['userTwo']] = $chatData['userTwoName'];
@@ -386,11 +385,11 @@ function prepRetrieveLastNMessages(&$log, $user_id) {
     $chat_id = $_POST['chatID'];
     $num_messages = $_POST['numMessages'];
 
-   /* if (!userHasAccessToChat($user_id, $chat_id)) {
-        $log['success'] = "false";
-        $log['error'] = "no access";
-        return;
-    } */
+    /* if (!userHasAccessToChat($user_id, $chat_id)) {
+      $log['success'] = "false";
+      $log['error'] = "no access";
+      return;
+      } */
     retrieveLastNMessages($log, $chat_id, $num_messages);
 }
 
@@ -431,15 +430,16 @@ function getUserChats(&$log, $user_id) {
     $conn = connectToDatabase();
     $results = $conn->query($query);
     $conn->close();
-    
-    while($row = $results->fetch_assoc()) {
+
+    while ($row = $results->fetch_assoc()) {
         $chat_ids[] = $row['id'];
     }
-    
+
     $log['chatIDs'] = $chat_ids;
     $log['success'] = "true";
     $log['response'] = "retrieved chat ids";
 }
+
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Get Profile Information">
 /**
@@ -452,11 +452,11 @@ function getProfileInformation(&$log, $user_id) {
     $conn = connectToDatabase();
     $results = $conn->query($query);
     $conn->close();
-    
-    if($results === FALSE) {
+
+    if ($results === FALSE) {
         $log['success'] = "false";
         $log['error'] = "unknown query error";
-    } else if($results->num_rows === 0) {
+    } else if ($results->num_rows === 0) {
         $log['success'] = "false";
         $log['error'] = "user id not found";
     } else {
@@ -468,8 +468,54 @@ function getProfileInformation(&$log, $user_id) {
         $log['response'] = "found user info";
     }
 }
-//</editor-fold>
 
+//</editor-fold>
+//<editor-fold defaultstate="collpased" desc="Get chat information">
+function prepGetChatInformation(&$log, $user_id) {
+    if(checkSet(array("chatID")) != 0) {
+        missingInputs($log);
+        return;
+    }
+    $chat_id = $_POST['chatID'];
+    getChatInformation($log, $chat_id, $user_id);
+}
+
+function getChatInformation(&$log, $chat_id, $user_id) {
+    $query = "SELECT * FROM `chats` WHERE `id` = '$chat_id' LIMIT 1";
+    $conn = connectToDatabase();
+    $results = $conn->query($query);
+    $conn->close();
+
+    if ($results->num_rows) {
+        $log['success'] = FALSE;
+        $log['error'] = "invalid chat id";
+        return;
+    }
+
+    $array = $results->fetch_assoc();
+    if (!($array['user_one'] == $user_id || $array['user_two'] == $user_id)) {
+        $log['success'] = FALSE;
+        $log['error'] = "user not part of chat";
+        return;
+    }
+
+    $chatData = getChatMetaData($chat_id);
+    if ($array['user_one'] == $user_id) {
+        $log['user_name'] = $chatData['userOneName'];
+        $log['partner_name'] = $chatData['userTwoName'];
+    } else {
+        $log['user_name'] = $chatData['userTwoName'];
+        $log['partner_name'] = $chatData['userOneName'];
+    }
+    $log['revealed_id'] = FALSE;
+    $log['num_messages'] = $chatData['count'];
+    $log['success'] = TRUE;
+    $log['response'] = "retrieved chat data";
+}
+
+
+
+//</editor-fold>
 /**
  * Retrieves the chat data for the given id. See backend notes for more info
  * @param string $chat_id UUID of the chat

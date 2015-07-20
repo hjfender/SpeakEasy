@@ -1,21 +1,64 @@
+/* Controls size of topics boxes and centers them */
 img {
 	width: 150px;
-	height: 150px;
-	margin-left: 70px;
+	margin-left: 20%;
 }
 
+/*This controls the width of the horizontal topics boxes */
 .jcarousel-wrapper {
 	width: 70%;
 }
 
+/* These place the arrows outside of the topics boxes*/
+.jcarousel-control-next {
+  right: -50px !important;
+}
+.jcarousel-control-prev {
+  left: -50px !important;
+}
+
+/* This is just for formatting if I want more space between stuff*/
 .space {
     height: 40px;
 }
 
-.jcarousel-control-next {
-  right: -50px;
+/*This class is for the description of the topic that fades in when you hover over it.*/
+.description {
+	
 }
 
-.jcarousel-control-prev {
-  left: -50px;
+
+/*********************************
+Description Code
+*********************************/
+.wrapper {
+    position: relative;
+    padding: 0;
+    width:150px;
+    display:block;
+}
+.text {
+    position: absolute;
+    top: 0;
+    color: black;
+    background-color:rgba(255,255,255,0.8);
+    width: 150px;
+    height: 150px;
+    line-height:150px;
+   	margin-left: 20%;
+    text-align: center;
+    z-index: 10;
+    opacity: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.text:hover {
+    opacity:1;
+}
+}
+
+img {
+    z-index:1;
 }

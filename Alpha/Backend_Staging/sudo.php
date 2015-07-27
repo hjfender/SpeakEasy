@@ -97,6 +97,34 @@ function createChatByIDs(&$log, $id_one, $id_two, $topic_id){
         } 
 }
 
+//Written by Ben
+/**Returns the active topics for the topics page. Sends them as a numeric array, with each index being an
+associative array of the necessary data for each topic**/
+function getActiveTopics(&$log){
+	$targetNum = 16; //number of necessary topics for the topics page. Can be modified
+	$query = "SELECT `topic_id`,`topic_name`,`description`,`type` FROM `topics_queue` WHERE `active` = TRUE";
+	$conn = connectToDatabase();
+	$results = ($conn->query($query));
+	$activeTopics = [];
+	
+	if($results->num_rows > $targetNum){
+		$log['error'] = "too many topics. truncating extras";
+	}
+	else if($results->num_rows < $targetNum){
+		$log['error'] = "too few topics."
+		//need a way to handle this. Pick random topic?
+	}
+	else{
+		$log['success'] = 'topics found and passed';
+	}
+	
+	for($i=0; $i<$results->num_rows; $i++){
+		$activeTopics[$i] = $results->fetch_array(MYSQLI_ASSOC);		
+	}
+	
+	return $activeTopics;
+}
+
 function createChatByEmails(&$log, $email_one, $email_two, $topic_id) {
     $queryOne = "SELECT `id` FROM `profiles` WHERE `email` LIKE '$email_one'";
     $queryTwo = "SELECT `id` FROM `profiles` WHERE `email` LIKE '$email_two'";

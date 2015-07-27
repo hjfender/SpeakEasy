@@ -219,6 +219,7 @@
         return $id; 
     }
 
+	//TODO add functionality if there are no unmatched users
     function addChatToDatabase($idOne, $idTwo, $fileName) {
         $serverfirst = "localhost";
         $userfirst = "root";
@@ -264,7 +265,7 @@
     function checkSet($toCheck) {
         $unchecked = array();
         foreach($toCheck as $value) {
-            if(!isset($_POST, $value)) {
+            if(!isset($_POST, $value)) { //always evaluates to false? aren't POST and value always set?
                 array_push($unchecked, $value);
             }
         }
